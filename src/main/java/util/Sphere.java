@@ -4,14 +4,17 @@ import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
+import util.material.Material;
 
 public class Sphere implements Hittable {
     private Point center;
     private double radius;
+    private Material material;
 
-    public Sphere(Point center, double radius) {
+    public Sphere(Point center, double radius, Material material) {
         this.center = center;
         this.radius = radius;
+        this.material = material;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class Sphere implements Hittable {
         rec.setPoint(r.at(rec.getT()));
         Vector outwardNormal = new Vector(center, rec.getPoint()).divide(radius);
         rec.setFaceNormal(r, outwardNormal);
-
+        rec.setMaterial(this.material);
         return true;
     }
 

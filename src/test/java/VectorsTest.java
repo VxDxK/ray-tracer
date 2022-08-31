@@ -27,4 +27,11 @@ class VectorsTest {
         assertEquals(result, new Vector(1, 41, 9));
 
     }
+
+    @Test
+    void reflect() {
+        Vector vector = new Vector(3, -3, 0);
+        Vector normal = new Vector(0, 1, 0);
+        assertEquals(Vectors.reflect(vector, normal), new Vector(3, 3, 0));
+    }
 }

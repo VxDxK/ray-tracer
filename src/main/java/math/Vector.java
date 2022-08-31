@@ -1,6 +1,9 @@
 package math;
 
 import java.util.Objects;
+import java.util.Random;
+
+import static java.lang.Math.abs;
 
 public class Vector {
     private double x = 0d;
@@ -28,6 +31,10 @@ public class Vector {
         this.z = vector.getZ();
     }
 
+    public boolean nearZero(){
+        double s = 1e-8;
+        return abs(x) < s && abs(y) < s && abs(z) < s;
+    }
 
     public Vector multiply(double t){
         return new Vector(x*t, y*t, z*t);

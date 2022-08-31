@@ -1,9 +1,5 @@
 package util;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.Objects;
 
 public class Color {
@@ -30,6 +26,15 @@ public class Color {
         this.blue = color.getBlue();
     }
 
+    public void set(Color color){
+        this.red = color.getRed();
+        this.green = color.getGreen();
+        this.blue = color.getBlue();
+    }
+
+    public Color scale(double t){
+        return new Color(red * t, green * t, blue * t);
+    }
 
     public double getRed() {
         return red;
