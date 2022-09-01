@@ -21,7 +21,7 @@ public class Util {
     /**
      * Represents normal of hit point, as a color
      */
-    private Color normalColor(Ray r, Hittable world){
+    public static Color normalColor(Ray r, Hittable world){
         HitRecord record = new HitRecord();
 
         if(world.hit(r, 0,  Double.POSITIVE_INFINITY, record)){

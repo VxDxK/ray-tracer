@@ -36,9 +36,9 @@ public class Main {
     public Main(BufferedWriter writer) throws IOException {
         //Image
         double aspectRatio = 16.0/9.0;
-        int width = 3840;
+        int width = 400;
         int height = (int)(width / aspectRatio);
-        int samplesPerPixel = 500;
+        int samplesPerPixel = 100;
         int depth = 50;
         //World
         HittableList world = new HittableArrayList();
@@ -46,22 +46,21 @@ public class Main {
         Material ground = new Lambertian(new Color(0.5, 0.5, 0.5));
         Material left = new Lambertian(new Color(0, 0, 1));
         Material center = new Metal(new Color(0.8, 0.6, 0.2));
-        Material right = new Dielectric(2.4);
+        Material right = new Dielectric(1.5);
 
         world.add(new Sphere(new Point(0, -1000, 0), 1000, ground));
 
-        world.add(new Sphere(new Point(-1.5, 1, 0), 1, left));
+        world.add(new Sphere(new Point(-2, 1, 0), 1, left));
         world.add(new Sphere(new Point(0, 1, 0), 1, center));
-        world.add(new Sphere(new Point(1.5, 1, 0), 1, right));
-        Util.fillScene(world);
+        world.add(new Sphere(new Point(2, 1, 0), 1, right));
+//        Util.fillScene(world);
         //Camera
-        Point lookFrom = new Point(13, 3, 13);
-        Point lookAt = new Point();
+        Point lookFrom = new Point(5, 5, 13);
+        Point lookAt = new Point(0, 1, 0);
         Vector worldNormal = new Vector(0, 1, 0);
         double fov = 20;
         double aperture = 0.1;
-        double focusDist = new Vector(lookAt, lookAt).length();
-
+        double focusDist = new Vector(lookAt, lookFrom).length();
 
         Camera camera = new ClearCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio);
 //        Camera camera = new BlurCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio, aperture, focusDist);
@@ -78,10 +77,10 @@ public class Main {
                     double v = ((double) j + random.nextDouble())/(height - 1);
                     Ray ray = camera.getRay(u, v);
                     Color color = rayColor(ray, world, depth).scale(1d/samplesPerPixel);
+//                    Color color = Util.normalColor(ray, world).scale(1d/samplesPerPixel);
                     pixelColor.setRed(pixelColor.getRed() + color.getRed())
                             .setGreen(pixelColor.getGreen() + color.getGreen())
                             .setBlue(pixelColor.getBlue() + color.getBlue());
-
                 }
                 writeColor(writer, pixelColor, Math::sqrt);
             }
@@ -118,7 +117,6 @@ public class Main {
         double r = gammaCorrectionFunction.apply(color.getRed());
         double g = gammaCorrectionFunction.apply(color.getGreen());
         double b = gammaCorrectionFunction.apply(color.getBlue());
-
         writer.write((int)(256 * clamp(r, 0d, 0.999)) + " " + (int)(256 * clamp(g, 0d, 0.999)) + " " + (int)(256 * clamp(b, 0d, 0.999)) + '\n');
     }
 
