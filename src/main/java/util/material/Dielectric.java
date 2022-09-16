@@ -8,14 +8,21 @@ import util.HitRecord;
 
 public class Dielectric implements Material{
     private final double refractionIndex;
-
+    private final Color albedo;
     public Dielectric(double refractionIndex) {
+        this(refractionIndex, new Color(1, 1, 1));
+    }
+
+    @SuppressWarnings("I dont know is it right to add albedo")
+    public Dielectric(double refractionIndex, Color albedo) {
         this.refractionIndex = refractionIndex;
+        this.albedo = albedo;
     }
 
     @Override
     public boolean scatter(Ray rayIn, HitRecord record, Color attenuation, Ray scattered) {
-        attenuation.set(new Color(1, 1, 1));
+//        attenuation.set(new Color(1, 1, 1));
+        attenuation.set(albedo);
         double refractionRatio = record.isFrontFace() ? (1.0/refractionIndex) : refractionIndex;
 
         Vector unitDirection = rayIn.getDirection().unit();

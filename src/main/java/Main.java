@@ -48,6 +48,10 @@ public class Main {
         Material center = new Metal(new Color(0.8, 0.6, 0.2));
         Material right = new Dielectric(1.5);
 
+        Material metalFuzz = new Metal(new Color(1, 1, 1), 1.0);
+
+        Material metalFuzz1 = new Metal(new Color(1, 1, 1));
+
         world.add(new Sphere(new Point(0, -1000, 0), 1000, ground));
 
         world.add(new Sphere(new Point(-2, 1, 0), 1, left));
@@ -55,7 +59,7 @@ public class Main {
         world.add(new Sphere(new Point(2, 1, 0), 1, right));
 //        Util.fillScene(world);
         //Camera
-        Point lookFrom = new Point(5, 5, 13);
+        Point lookFrom = new Point(13, 5, 13);
         Point lookAt = new Point(0, 1, 0);
         Vector worldNormal = new Vector(0, 1, 0);
         double fov = 20;

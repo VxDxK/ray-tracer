@@ -32,6 +32,10 @@ public class Color {
         this.blue = color.getBlue();
     }
 
+    public static Color getByRGB(int r, int g, int b){
+        return new Color((float)r/255, (float)g/255, (float)b/255);
+    }
+
     public Color scale(double t){
         return new Color(red * t, green * t, blue * t);
     }
