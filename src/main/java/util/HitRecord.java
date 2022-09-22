@@ -4,7 +4,7 @@ import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.material.Material;
+import material.Material;
 
 public class HitRecord{
     private Point point = new Point();

@@ -1,9 +1,9 @@
-package util.material;
+package material;
 
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.Color;
+import math.Color;
 import util.HitRecord;
 
 public class Metal implements Material{
@@ -24,8 +24,9 @@ public class Metal implements Material{
     @Override
     public boolean scatter(Ray rayIn, HitRecord record, Color attenuation, Ray scattered) {
         Vector reflected = Vectors.reflect(rayIn.getDirection().unit(), record.getNormal());
-        scattered.setOrigin(record.getPoint());
-        scattered.setDirection(reflected.add(Vectors.randomInUnitSphere().multiply(fuzz)));
+        scattered.setOrigin(record.getPoint())
+                .setDirection(reflected.add(Vectors.randomInUnitSphere().multiply(fuzz)))
+                .setTimeMoment(rayIn.getTimeMoment());
         attenuation.set(albedo);
         return Vectors.dot(scattered.getDirection(), record.getNormal()) > 0;
     }

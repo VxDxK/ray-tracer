@@ -1,15 +1,20 @@
+import camera.BlurCamera;
+import camera.MotionBlurCamera;
+import math.Color;
 import math.Point;
 import math.Ray;
 import math.Vector;
-import util.camera.BlurCamera;
-import util.camera.Camera;
-import util.camera.ClearCamera;
+import camera.Camera;
+import camera.ClearCamera;
+import objects.MovingSphere;
 import util.collections.*;
 import util.*;
-import util.material.Dielectric;
-import util.material.Lambertian;
-import util.material.Material;
-import util.material.Metal;
+import material.Dielectric;
+import material.Lambertian;
+import material.Material;
+import material.Metal;
+import objects.Hittable;
+import objects.Sphere;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -31,6 +36,7 @@ public class Main {
             new Main(writer);
             System.out.println("Processing time: " + (((double)(System.currentTimeMillis() - start))/1000));
         }
+        Convertor.main(args);
     }
 
     public Main(BufferedWriter writer) throws IOException {
@@ -55,7 +61,8 @@ public class Main {
         world.add(new Sphere(new Point(0, -1000, 0), 1000, ground));
 
         world.add(new Sphere(new Point(-2, 1, 0), 1, left));
-        world.add(new Sphere(new Point(0, 1, 0), 1, center));
+//        world.add(new Sphere(new Point(0, 1, 0), 1, center));
+        world.add(new MovingSphere(new Point(0, 1, 0), new Point(0, 2, 0), 1, 0, 1, center));
         world.add(new Sphere(new Point(2, 1, 0), 1, right));
 //        Util.fillScene(world);
         //Camera
@@ -66,8 +73,10 @@ public class Main {
         double aperture = 0.1;
         double focusDist = new Vector(lookAt, lookFrom).length();
 
-        Camera camera = new ClearCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio);
-//        Camera camera = new BlurCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio, aperture, focusDist);
+        Camera cameraClear = new ClearCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio);
+        Camera cameraBlur = new BlurCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio, aperture, focusDist);
+
+        Camera camera = new MotionBlurCamera(cameraClear, 0, 0.5);
 
         Random random = new Random();
         //Rendering

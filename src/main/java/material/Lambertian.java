@@ -1,9 +1,9 @@
-package util.material;
+package material;
 
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.Color;
+import math.Color;
 import util.HitRecord;
 
 /**
@@ -22,8 +22,7 @@ public class Lambertian implements Material{
         if(scatteredDirection.nearZero()){
             scatteredDirection = record.getNormal();
         }
-        scattered.setDirection(scatteredDirection);
-        scattered.setOrigin(record.getPoint());
+        scattered.setDirection(scatteredDirection).setOrigin(record.getPoint()).setTimeMoment(rayIn.getTimeMoment());
         attenuation.set(albedo);
         return true;
     }

@@ -1,10 +1,9 @@
-package util.camera;
+package camera;
 
 import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.camera.Camera;
 
 public class BlurCamera implements Camera {
     private final Point origin;

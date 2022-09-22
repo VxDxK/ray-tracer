@@ -1,6 +1,6 @@
 package util.collections;
 
-import util.Hittable;
+import objects.Hittable;
 
 import java.util.List;
 

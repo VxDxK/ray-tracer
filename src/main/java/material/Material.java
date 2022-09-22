@@ -1,7 +1,7 @@
-package util.material;
+package material;
 
 import math.Ray;
-import util.Color;
+import math.Color;
 import util.HitRecord;
 
 public interface Material {

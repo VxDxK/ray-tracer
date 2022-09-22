@@ -1,9 +1,9 @@
-package util.material;
+package material;
 
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.Color;
+import math.Color;
 import util.HitRecord;
 
 public class Dielectric implements Material{
@@ -37,8 +37,7 @@ public class Dielectric implements Material{
         }else{
             direction = Vectors.refract(unitDirection, record.getNormal(), refractionRatio);
         }
-        scattered.setOrigin(record.getPoint());
-        scattered.setDirection(direction);
+        scattered.setOrigin(record.getPoint()).setDirection(direction).setTimeMoment(rayIn.getTimeMoment());
         return true;
     }
 

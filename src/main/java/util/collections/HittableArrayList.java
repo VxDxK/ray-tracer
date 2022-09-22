@@ -1,7 +1,7 @@
 package util.collections;
 
 import util.HitRecord;
-import util.Hittable;
+import objects.Hittable;
 import math.Ray;
 
 import java.util.ArrayList;

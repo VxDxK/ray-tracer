@@ -1,4 +1,4 @@
-package util.camera;
+package camera;
 
 import math.Point;
 import math.Ray;

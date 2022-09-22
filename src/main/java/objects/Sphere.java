@@ -1,10 +1,11 @@
-package util;
+package objects;
 
 import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.material.Material;
+import util.HitRecord;
+import material.Material;
 
 public class Sphere implements Hittable {
     private Point center;

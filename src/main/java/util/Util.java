@@ -1,13 +1,16 @@
 package util;
 
+import math.Color;
 import math.Point;
 import math.Ray;
 import math.Vector;
 import util.collections.HittableList;
-import util.material.Dielectric;
-import util.material.Lambertian;
-import util.material.Material;
-import util.material.Metal;
+import material.Dielectric;
+import material.Lambertian;
+import material.Material;
+import material.Metal;
+import objects.Hittable;
+import objects.Sphere;
 
 import static java.lang.Math.*;
 
@@ -36,8 +39,8 @@ public class Util {
     }
 
     public static void fillScene(HittableList world) {
-        for (int x = -20; x < 20; x++) {
-            for (int z = -20; z < 20; z++) {
+        for (int x = -11; x < 11; x++) {
+            for (int z = -11; z < 11; z++) {
                 Point location = new Point(x + random() * 0.9, 0.2, z + random() * 0.9);
                 if (new Vector(new Point(0, 0.2, 0), location).length() > 3) {
                     double rand = random();
