@@ -41,7 +41,7 @@ public class Util {
     public static void fillScene(HittableList world) {
         for (int x = -11; x < 11; x++) {
             for (int z = -11; z < 11; z++) {
-                Point location = new Point(x + random() * 0.9, 0.2, z + random() * 0.9);
+                Point location = new Point(x + random() * 0.9, -0.8, z + random() * 0.9);
                 if (new Vector(new Point(0, 0.2, 0), location).length() > 3) {
                     double rand = random();
                     if (rand < 0.50) {

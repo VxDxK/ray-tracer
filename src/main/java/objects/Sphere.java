@@ -6,6 +6,7 @@ import math.Vector;
 import math.Vectors;
 import util.HitRecord;
 import material.Material;
+import util.Pair;
 
 public class Sphere implements Hittable {
     private Point center;
@@ -36,12 +37,24 @@ public class Sphere implements Hittable {
                 return false;
         }
 
-        rec.setT(root);
-        rec.setPoint(r.at(rec.getT()));
+        rec.setT(root)
+                .setPoint(r.at(rec.getT()));
         Vector outwardNormal = new Vector(center, rec.getPoint()).divide(radius);
-        rec.setFaceNormal(r, outwardNormal);
-        rec.setMaterial(this.material);
+        rec.setFaceNormal(r, outwardNormal)
+                .setMaterial(this.material).setUV(getHitCoordinates(new Point().move(outwardNormal)));
         return true;
+    }
+
+    @Override
+    public boolean boundingBox(double time0, double time1, AABB aabb) {
+        aabb.setMin(center.move(new Vector(radius, radius, radius).negate())).setMax(center.move(new Vector(radius, radius, radius)));
+        return true;
+    }
+
+    private Pair<Double, Double> getHitCoordinates(Point point){
+        double u = (Math.atan2(-point.getZ(), point.getX()) + Math.PI) / (2 * Math.PI);
+        double v = Math.acos(-point.getY())/Math.PI;
+        return new Pair<>(u, v);
     }
 
     public Point getCenter() {

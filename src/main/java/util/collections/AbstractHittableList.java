@@ -8,10 +8,15 @@ import java.util.List;
 import java.util.ListIterator;
 
 public abstract class AbstractHittableList implements HittableList {
-    private List<Hittable> list;
+    protected List<Hittable> list;
 
     public AbstractHittableList(List<Hittable> list) {
         this.list = list;
+    }
+
+    @Override
+    public List<Hittable> getList() {
+        return list;
     }
 
     @Override

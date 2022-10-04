@@ -50,6 +50,17 @@ public class MovingSphere implements Hittable{
         return true;
     }
 
+    @Override
+    public boolean boundingBox(double time0, double time1, AABB aabb) {
+        AABB box0 = new AABB(center(time0).move(new Vector(radius, radius, radius).negate()),
+                center(time0).move(new Vector(radius, radius, radius)));
+
+        AABB box1 = new AABB(center(time1).move(new Vector(radius, radius, radius).negate()),
+                center(time1).move(new Vector(radius, radius, radius)));
+        aabb.set(AABB.surroundingBox(box0, box1));
+        return true;
+    }
+
     private Point center(double time){
         if(Math.abs(timeFinish - timeStart) <= 1e-10){
             return centerStart;

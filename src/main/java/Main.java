@@ -1,26 +1,27 @@
 import camera.BlurCamera;
 import camera.MotionBlurCamera;
-import math.Color;
-import math.Point;
-import math.Ray;
-import math.Vector;
+import math.*;
 import camera.Camera;
 import camera.ClearCamera;
-import objects.MovingSphere;
-import util.collections.*;
-import util.*;
 import material.Dielectric;
 import material.Lambertian;
 import material.Material;
 import material.Metal;
-import objects.Hittable;
-import objects.Sphere;
-
+import objects.*;
+import texture.CheckerTexture;
+import texture.ImageTexture;
+import texture.SolidColorTexture;
+import texture.Texture;
+import util.HitRecord;
+import util.Util;
+import util.collections.HittableArrayList;
+import util.collections.HittableList;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.function.Function;
@@ -49,24 +50,48 @@ public class Main {
         //World
         HittableList world = new HittableArrayList();
 
-        Material ground = new Lambertian(new Color(0.5, 0.5, 0.5));
-        Material left = new Lambertian(new Color(0, 0, 1));
+        Path earth = Paths.get("src", "main", "resources", "earthrealistic.jpg");
+//        Path earth = Paths.get("src", "main", "resources", "earthmap.jpg");
+
+        Texture earthTexture = new ImageTexture(earth);
+        Texture groundChecker = new CheckerTexture(earthTexture, new SolidColorTexture(new Color(0.3, 0.2, 0.6)));
+//        Texture groundChecker = new CheckerTexture(new Color(0.2, 0.3, 0.1), new Color(0.9, 0.9, 0.9));
+//        Material ground = new Lambertian(new Color(0.5, 0.5, 0.5));
+
+        Material ground = new Lambertian(groundChecker);
+        Material left = new Metal(new Color(1, 1, 1));
         Material center = new Metal(new Color(0.8, 0.6, 0.2));
         Material right = new Dielectric(1.5);
 
         Material metalFuzz = new Metal(new Color(1, 1, 1), 1.0);
 
         Material metalFuzz1 = new Metal(new Color(1, 1, 1));
+        world.add(new Sphere(new Point(0, -1001, 0), 1000, ground));
+//        world.add(new Sphere(new Point(0, -1000, 0), 1000, new Metal(new Color(1, 1, 1), 0.1)));
 
-        world.add(new Sphere(new Point(0, -1000, 0), 1000, ground));
+//        world.add(new Sphere(new Point(-4, 0, 0), 1, left));
+//        world.add(new Sphere(new Point(-2, 0, 0), 1, left));
+//        world.add(new Sphere(new Point(-5, 0, -5), 1, left));
+//        world.add(new Sphere(new Point(2, 0, -5), 1, left));
+//        world.add(new Sphere(new Point(-2, 0, -5), 1, left));
+//        world.add(new Sphere(new Point(0, 1, 0), 1, new Lambertian(new CheckerTexture(new Color(1, 1, 1), new Color(0.8, 0.6, 0.2)))));
+//        world.add(new Sphere(new Point(0, 1, 0), 1, new Metal(earthTexture)));
+        Sphere centralSphere = new Sphere(new Point(0, 0, 0), 1, new Lambertian(earthTexture));
+//        world.add(centralSphere);
 
-        world.add(new Sphere(new Point(-2, 1, 0), 1, left));
-//        world.add(new Sphere(new Point(0, 1, 0), 1, center));
-        world.add(new MovingSphere(new Point(0, 1, 0), new Point(0, 2, 0), 1, 0, 1, center));
-        world.add(new Sphere(new Point(2, 1, 0), 1, right));
+//        world.add(new Sphere(new Point(0, 1, 0), 1, new Lambertian(new CheckerTexture(groundChecker, new SolidColorTexture( new Color(0.8, 0.6, 0.2))))));
+
+        world.add(new MovingSphere(new Point(0, 0, 0), new Point(0, 2, 0), 1, 0, 1, left));
+//        world.add(new Sphere(new Point(2, 0, 0), 1, right));
 //        Util.fillScene(world);
+
+        BVHNode bvhNode = new BVHNode(world, 0, 0);
+        world = new HittableArrayList();
+        world.add(bvhNode);
+//        System.exit(-1);
         //Camera
         Point lookFrom = new Point(13, 5, 13);
+//        Point lookFrom = new Point(0, 5, 13);
         Point lookAt = new Point(0, 1, 0);
         Vector worldNormal = new Vector(0, 1, 0);
         double fov = 20;
@@ -76,13 +101,13 @@ public class Main {
         Camera cameraClear = new ClearCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio);
         Camera cameraBlur = new BlurCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio, aperture, focusDist);
 
-        Camera camera = new MotionBlurCamera(cameraClear, 0, 0.5);
+        Camera camera = new MotionBlurCamera(cameraClear, 0, 0);
 
         Random random = new Random();
         //Rendering
         writer.write("P3\n" + width + " " + height + "\n255\n");
         for(int j = height - 1; j > -1; j--){
-            System.out.println("Lines remaining " + (j + 1));
+            System.out.print("Lines remaining " + (j + 1) + "\r");
             for(int i = 0; i < width; i++){
                 Color pixelColor = new Color();
                 for(int s = 0; s < samplesPerPixel; s++){
@@ -95,9 +120,8 @@ public class Main {
                             .setGreen(pixelColor.getGreen() + color.getGreen())
                             .setBlue(pixelColor.getBlue() + color.getBlue());
                 }
-                writeColor(writer, pixelColor, Math::sqrt);
+                writeColor(writer, pixelColor, (x) -> Math.pow(x, 1));
             }
-
         }
         writer.flush();
     }
