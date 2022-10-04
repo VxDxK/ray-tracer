@@ -6,7 +6,7 @@ import math.Vectors;
 import math.Color;
 import texture.SolidColorTexture;
 import texture.Texture;
-import util.HitRecord;
+import math.HitRecord;
 
 public class Metal implements Material{
     private final Texture albedo;

@@ -4,23 +4,23 @@ import math.Ray;
 import objects.comparator.XComparator;
 import objects.comparator.YComparator;
 import objects.comparator.ZComparator;
-import util.HitRecord;
-import util.collections.HittableList;
+import math.HitRecord;
+import util.collections.BoundingList;
 
 import java.util.*;
 
-public class BVHNode implements Hittable{
-    private Hittable left;
-    private Hittable right;
-    private AABB box;
+public class BVHNode implements Boundable {
+    private final Boundable left;
+    private final Boundable right;
+    private final AABB box;
 
     private static final List<Comparator<Hittable>> comparators = List.of(new XComparator(), new YComparator(), new ZComparator());
 
-    public BVHNode(HittableList hittableList, double time0, double time1){
+    public BVHNode(BoundingList hittableList, double time0, double time1){
         this(hittableList.getList(), 0, hittableList.getList().size(), time0, time1);
     }
 
-    public BVHNode(List<Hittable> objects, int start, int end, double time0, double time1){
+    public BVHNode(List<Boundable> objects, int start, int end, double time0, double time1){
         Random random = new Random();
         int axis = random.nextInt(0, 3);
         Comparator<Hittable> comparator = comparators.get(axis);
@@ -38,10 +38,9 @@ public class BVHNode implements Hittable{
             left = new BVHNode(objects, start, mid, time0, time1);
             right = new BVHNode(objects, mid, end, time0, time1);
         }
-        AABB boxLeft = new AABB(), boxRight = new AABB();
-        if(!left.boundingBox(time0, time1, boxLeft) || !right.boundingBox(time0, time1, boxRight)){
-            throw new RuntimeException("No bounding box in BVHNode constructor");
-        }
+        AABB boxLeft = left.boundingBox(time0, time1);
+        AABB boxRight = right.boundingBox(time0, time1);
+
         box = AABB.surroundingBox(boxLeft, boxRight);
     }
 
@@ -57,9 +56,8 @@ public class BVHNode implements Hittable{
     }
 
     @Override
-    public boolean boundingBox(double time0, double time1, AABB aabb) {
-        aabb.set(box);
-        return true;
+    public AABB boundingBox(double time0, double time1) {
+        return box;
     }
 
     public Hittable getLeft() {
@@ -82,4 +80,6 @@ public class BVHNode implements Hittable{
                 ", right=" + right +
                 '}';
     }
+
+
 }

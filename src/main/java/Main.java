@@ -12,9 +12,9 @@ import texture.CheckerTexture;
 import texture.ImageTexture;
 import texture.SolidColorTexture;
 import texture.Texture;
-import util.HitRecord;
-import util.Util;
-import util.collections.HittableArrayList;
+import math.HitRecord;
+import util.collections.impl.BoundingArrayList;
+import util.collections.impl.HittableArrayList;
 import util.collections.HittableList;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -48,8 +48,8 @@ public class Main {
         int samplesPerPixel = 100;
         int depth = 50;
         //World
-        HittableList world = new HittableArrayList();
-
+        HittableList listWorld = new HittableArrayList();
+        BoundingArrayList world = new BoundingArrayList();
         Path earth = Paths.get("src", "main", "resources", "earthrealistic.jpg");
 //        Path earth = Paths.get("src", "main", "resources", "earthmap.jpg");
 
@@ -77,17 +77,16 @@ public class Main {
 //        world.add(new Sphere(new Point(0, 1, 0), 1, new Lambertian(new CheckerTexture(new Color(1, 1, 1), new Color(0.8, 0.6, 0.2)))));
 //        world.add(new Sphere(new Point(0, 1, 0), 1, new Metal(earthTexture)));
         Sphere centralSphere = new Sphere(new Point(0, 0, 0), 1, new Lambertian(earthTexture));
-//        world.add(centralSphere);
+        world.add(centralSphere);
 
 //        world.add(new Sphere(new Point(0, 1, 0), 1, new Lambertian(new CheckerTexture(groundChecker, new SolidColorTexture( new Color(0.8, 0.6, 0.2))))));
 
-        world.add(new MovingSphere(new Point(0, 0, 0), new Point(0, 2, 0), 1, 0, 1, left));
+//        world.add(new MovingSphere(new Point(0, 0, 0), new Point(0, 2, 0), 1, 0, 1, left));
 //        world.add(new Sphere(new Point(2, 0, 0), 1, right));
 //        Util.fillScene(world);
 
         BVHNode bvhNode = new BVHNode(world, 0, 0);
-        world = new HittableArrayList();
-        world.add(bvhNode);
+        listWorld.add(bvhNode);
 //        System.exit(-1);
         //Camera
         Point lookFrom = new Point(13, 5, 13);
@@ -114,13 +113,13 @@ public class Main {
                     double u = ((double) i + random.nextDouble())/(width - 1);
                     double v = ((double) j + random.nextDouble())/(height - 1);
                     Ray ray = camera.getRay(u, v);
-                    Color color = rayColor(ray, world, depth).scale(1d/samplesPerPixel);
+                    Color color = rayColor(ray, listWorld, depth).scale(1d/samplesPerPixel);
 //                    Color color = Util.normalColor(ray, world).scale(1d/samplesPerPixel);
                     pixelColor.setRed(pixelColor.getRed() + color.getRed())
                             .setGreen(pixelColor.getGreen() + color.getGreen())
                             .setBlue(pixelColor.getBlue() + color.getBlue());
                 }
-                writeColor(writer, pixelColor, (x) -> Math.pow(x, 1));
+                writeColor(writer, pixelColor, Math::sqrt);
             }
         }
         writer.flush();

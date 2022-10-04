@@ -1,9 +1,6 @@
 package util;
 
-import math.Color;
-import math.Point;
-import math.Ray;
-import math.Vector;
+import math.*;
 import util.collections.HittableList;
 import material.Dielectric;
 import material.Lambertian;

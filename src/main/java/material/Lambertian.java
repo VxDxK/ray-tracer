@@ -6,7 +6,7 @@ import math.Vectors;
 import math.Color;
 import texture.SolidColorTexture;
 import texture.Texture;
-import util.HitRecord;
+import math.HitRecord;
 
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian reflection</a>

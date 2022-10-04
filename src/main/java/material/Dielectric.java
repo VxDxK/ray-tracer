@@ -4,7 +4,7 @@ import math.Ray;
 import math.Vector;
 import math.Vectors;
 import math.Color;
-import util.HitRecord;
+import math.HitRecord;
 
 public class Dielectric implements Material{
     private final double refractionIndex;

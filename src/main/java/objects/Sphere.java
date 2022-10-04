@@ -4,11 +4,11 @@ import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.HitRecord;
+import math.HitRecord;
 import material.Material;
 import util.Pair;
 
-public class Sphere implements Hittable {
+public class Sphere implements Boundable {
     private Point center;
     private double radius;
     private Material material;
@@ -46,9 +46,8 @@ public class Sphere implements Hittable {
     }
 
     @Override
-    public boolean boundingBox(double time0, double time1, AABB aabb) {
-        aabb.setMin(center.move(new Vector(radius, radius, radius).negate())).setMax(center.move(new Vector(radius, radius, radius)));
-        return true;
+    public AABB boundingBox(double time0, double time1) {
+        return new AABB(center.move(new Vector(radius, radius, radius).negate()), center.move(new Vector(radius, radius, radius)));
     }
 
     private Pair<Double, Double> getHitCoordinates(Point point){
@@ -72,4 +71,6 @@ public class Sphere implements Hittable {
     public void setRadius(double radius) {
         this.radius = radius;
     }
+
+
 }

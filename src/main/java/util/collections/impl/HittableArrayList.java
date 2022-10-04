@@ -1,9 +1,10 @@
-package util.collections;
+package util.collections.impl;
 
 import objects.AABB;
-import util.HitRecord;
+import math.HitRecord;
 import objects.Hittable;
 import math.Ray;
+import util.collections.AbstractHittableList;
 
 import java.util.ArrayList;
 
@@ -26,29 +27,6 @@ public class HittableArrayList extends AbstractHittableList {
             }
         }
         return hitAnything;
-    }
-
-    @Override
-    public boolean boundingBox(double time0, double time1, AABB outputBox) {
-        if(this.list.isEmpty()){
-            return false;
-        }
-
-        AABB tmpBox = new AABB();
-        boolean firstBox = true;
-
-        for(Hittable i : this){
-            if(!i.boundingBox(time0, time1, tmpBox)){
-                return false;
-            }
-            if(firstBox){
-                outputBox.set(tmpBox);
-            }else{
-                outputBox.set(AABB.surroundingBox(outputBox, tmpBox));
-            }
-            firstBox = false;
-        }
-        return true;
     }
 
     @Override

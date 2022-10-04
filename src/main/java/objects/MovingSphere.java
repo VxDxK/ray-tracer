@@ -4,10 +4,10 @@ import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.HitRecord;
+import math.HitRecord;
 import material.Material;
 
-public class MovingSphere implements Hittable{
+public class MovingSphere implements Boundable {
     private final Point centerStart;
     private final Point centerFinish;
     private final double timeStart;
@@ -50,15 +50,15 @@ public class MovingSphere implements Hittable{
         return true;
     }
 
+
     @Override
-    public boolean boundingBox(double time0, double time1, AABB aabb) {
+    public AABB boundingBox(double time0, double time1) {
         AABB box0 = new AABB(center(time0).move(new Vector(radius, radius, radius).negate()),
                 center(time0).move(new Vector(radius, radius, radius)));
 
         AABB box1 = new AABB(center(time1).move(new Vector(radius, radius, radius).negate()),
                 center(time1).move(new Vector(radius, radius, radius)));
-        aabb.set(AABB.surroundingBox(box0, box1));
-        return true;
+        return AABB.surroundingBox(box0, box1);
     }
 
     private Point center(double time){
@@ -67,5 +67,6 @@ public class MovingSphere implements Hittable{
         }
         return centerStart.move(new Vector(centerStart, centerFinish).multiply((time - timeStart)/(timeFinish - timeStart)));
     }
+
 
 }

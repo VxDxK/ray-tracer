@@ -1,10 +1,7 @@
-package util;
+package math;
 
-import math.Point;
-import math.Ray;
-import math.Vector;
-import math.Vectors;
 import material.Material;
+import util.Pair;
 
 public class HitRecord{
     private Point point = new Point();
