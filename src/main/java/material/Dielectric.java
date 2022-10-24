@@ -21,10 +21,8 @@ public class Dielectric implements Material{
 
     @Override
     public boolean scatter(Ray rayIn, HitRecord record, Color attenuation, Ray scattered) {
-//        attenuation.set(new Color(1, 1, 1));
         attenuation.set(albedo);
         double refractionRatio = record.isFrontFace() ? (1.0/refractionIndex) : refractionIndex;
-
         Vector unitDirection = rayIn.getDirection().unit();
 
         double cosTheta = Math.min(1d, Vectors.dot(unitDirection.negate(), record.getNormal()));

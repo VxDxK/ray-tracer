@@ -5,6 +5,7 @@ import math.Ray;
 import math.Vector;
 import math.Vectors;
 
+
 public class ClearCamera implements Camera{
     private final Point origin;
     private final Point lowerLeftCorner;
@@ -18,7 +19,6 @@ public class ClearCamera implements Camera{
         double viewportWidth = aspectRatio * viewportHeight;
 
         double focalLength = 1.0;
-
         Vector w = new Vector(lookAt, lookFrom).unit();
         Vector u = Vectors.cross(worldNormal, w).unit();
         Vector v = Vectors.cross(w, u);
@@ -32,7 +32,7 @@ public class ClearCamera implements Camera{
 
     @Override
     public Ray getRay(double s, double t) {
-        Vector vector = horizontal.multiply(s).add(vertical.multiply(t));
+        Vector vector = horizontal.multiply(s).add(vertical.multiply(1 - t));
         return new Ray(origin, new Vector(origin, lowerLeftCorner).add(vector));
     }
 
@@ -51,4 +51,5 @@ public class ClearCamera implements Camera{
     public Vector getVertical() {
         return vertical;
     }
+    
 }

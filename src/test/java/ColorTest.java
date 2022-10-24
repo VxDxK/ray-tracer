@@ -22,4 +22,10 @@ class ColorTest {
         Color color = new Color(0.5, 0.4, 0.3);
         assertEquals(color.scale(2), new Color(1, 0.8, 0.6));
     }
+
+    @Test
+    void toRGBfromRGB(){
+        Color color = new Color(1, 0, 1);
+        assertEquals(color, Color.getByRGB(color.toRGB()));
+    }
 }

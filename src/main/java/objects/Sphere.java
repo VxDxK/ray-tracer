@@ -1,17 +1,13 @@
 package objects;
 
-import math.Point;
-import math.Ray;
-import math.Vector;
-import math.Vectors;
-import math.HitRecord;
+import math.*;
 import material.Material;
 import util.Pair;
 
 public class Sphere implements Boundable {
     private Point center;
     private double radius;
-    private Material material;
+    private final Material material;
 
     public Sphere(Point center, double radius, Material material) {
         this.center = center;
@@ -20,7 +16,7 @@ public class Sphere implements Boundable {
     }
 
     @Override
-    public boolean hit(Ray r, double tMin, double tMax, HitRecord rec) {
+    public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
         Vector oc = new Vector(center, r.getOrigin());
         double A = r.getDirection().lengthSquared();
         double halfB = Vectors.dot(oc, r.getDirection());
@@ -31,9 +27,9 @@ public class Sphere implements Boundable {
         }
         double sqrtd = Math.sqrt(discriminant);
         double root = (-halfB - sqrtd) / A;
-        if (root < tMin || tMax < root) {
+        if (!tInterval.contains(root)) {
             root = (-halfB + sqrtd) / A;
-            if (root < tMin || tMax < root)
+            if (!tInterval.contains(root))
                 return false;
         }
 
@@ -46,7 +42,7 @@ public class Sphere implements Boundable {
     }
 
     @Override
-    public AABB boundingBox(double time0, double time1) {
+    public AABB boundingBox() {
         return new AABB(center.move(new Vector(radius, radius, radius).negate()), center.move(new Vector(radius, radius, radius)));
     }
 

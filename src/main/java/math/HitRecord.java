@@ -10,7 +10,7 @@ public class HitRecord{
     private double u;
     private double v;
     private boolean frontFace = true;
-    private Material material;
+    private  Material material;
     public HitRecord() {
     }
 

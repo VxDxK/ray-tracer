@@ -1,21 +1,19 @@
 import camera.BlurCamera;
 import camera.MotionBlurCamera;
+import image.Image;
+import material.*;
 import math.*;
 import camera.Camera;
 import camera.ClearCamera;
-import material.Dielectric;
-import material.Lambertian;
-import material.Material;
-import material.Metal;
 import objects.*;
-import texture.CheckerTexture;
-import texture.ImageTexture;
-import texture.SolidColorTexture;
-import texture.Texture;
 import math.HitRecord;
-import util.collections.impl.BoundingArrayList;
+import texture.ImageTexture;
+import texture.Texture;
+import util.collections.impl.BoundableArrayList;
 import util.collections.impl.HittableArrayList;
 import util.collections.HittableList;
+
+import javax.imageio.ImageIO;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -49,72 +48,65 @@ public class Main {
         int depth = 50;
         //World
         HittableList listWorld = new HittableArrayList();
-        BoundingArrayList world = new BoundingArrayList();
+        BoundableArrayList world = new BoundableArrayList();
         Path earth = Paths.get("src", "main", "resources", "earthrealistic.jpg");
-//        Path earth = Paths.get("src", "main", "resources", "earthmap.jpg");
-
         Texture earthTexture = new ImageTexture(earth);
-        Texture groundChecker = new CheckerTexture(earthTexture, new SolidColorTexture(new Color(0.3, 0.2, 0.6)));
-//        Texture groundChecker = new CheckerTexture(new Color(0.2, 0.3, 0.1), new Color(0.9, 0.9, 0.9));
-//        Material ground = new Lambertian(new Color(0.5, 0.5, 0.5));
 
-        Material ground = new Lambertian(groundChecker);
-        Material left = new Metal(new Color(1, 1, 1));
-        Material center = new Metal(new Color(0.8, 0.6, 0.2));
-        Material right = new Dielectric(1.5);
+//        world.add(new Sphere(new Point(0, -1000, 0), 999, new Metal(new Color(1, 1, 1), 0.5)));
+//        world.add(new Sphere(new Point(0, -1000, 0), 999, new Metal(new Color(0.1, 0.1, 0.1), 0.5)));
+//        Boundable boundable = new Quadrilateral(new Point(0, 0, 0), new Vector(1, 4, 0), new Vector(0, 0.5, 1), new Lambertian(Colors.BLUE));
 
-        Material metalFuzz = new Metal(new Color(1, 1, 1), 1.0);
+        if(false){
+            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(0,0,-6), new Vector(0,6,0), new Lambertian(Colors.RED)));
+            listWorld.add(new Quadrilateral(new Point(-2,-3,0), new Vector(6,0,0), new Vector(0,7,0), new Lambertian(Colors.WHITE)));
+            listWorld.add(new Quadrilateral(new Point(-2,3,0), new Vector(6,0,0), new Vector(0,0,6), new Lambertian(Colors.GREEN)));
+            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(6,0,0), new Vector(0,0,-6), new Lambertian(Colors.BLACK)));
+        }else{
+            double fuzz = 0.0;
+            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(0,0,-6), new Vector(0,6,0), new Metal(Colors.WHITE, fuzz)));
+//            listWorld.add(new Quadrilateral(new Point(-2,-3,0), new Vector(6,0,0), new Vector(0,7,0), new Metal(Colors.WHITE, fuzz)));
+            listWorld.add(new Quadrilateral(new Point(-2,3,0), new Vector(6,0,0), new Vector(0,0,6), new Metal(Colors.WHITE, fuzz)));
+            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(6,0,0), new Vector(0,0,-6), new Metal(Colors.WHITE, fuzz)));
+        }
+        listWorld.add(new Sphere(new Point(0, -1000, 0), 997, new Lambertian(new Color(0.7, 0.7, 0.8))));
+        listWorld.add(new Sphere(new Point(2, 0, 3), 1, new Lambertian(Colors.PURPLE)));
 
-        Material metalFuzz1 = new Metal(new Color(1, 1, 1));
-        world.add(new Sphere(new Point(0, -1001, 0), 1000, ground));
-//        world.add(new Sphere(new Point(0, -1000, 0), 1000, new Metal(new Color(1, 1, 1), 0.1)));
 
-//        world.add(new Sphere(new Point(-4, 0, 0), 1, left));
-//        world.add(new Sphere(new Point(-2, 0, 0), 1, left));
-//        world.add(new Sphere(new Point(-5, 0, -5), 1, left));
-//        world.add(new Sphere(new Point(2, 0, -5), 1, left));
-//        world.add(new Sphere(new Point(-2, 0, -5), 1, left));
-//        world.add(new Sphere(new Point(0, 1, 0), 1, new Lambertian(new CheckerTexture(new Color(1, 1, 1), new Color(0.8, 0.6, 0.2)))));
-//        world.add(new Sphere(new Point(0, 1, 0), 1, new Metal(earthTexture)));
-        Sphere centralSphere = new Sphere(new Point(0, 0, 0), 1, new Lambertian(earthTexture));
-        world.add(centralSphere);
 
-//        world.add(new Sphere(new Point(0, 1, 0), 1, new Lambertian(new CheckerTexture(groundChecker, new SolidColorTexture( new Color(0.8, 0.6, 0.2))))));
+        //        world.add(new Sphere(new Point(0.5, 0, 0.5), 1, new Metal(Colors.RED)));
+//        world.add(new Sphere(new Point(0.5, 0, 3.5), 1, new Dielectric(1.5, Colors.WHITE)));
+//        world.add(new Sphere(new Point(), 1, new Lambertian(earthTexture)));
+//        world.add(new Sphere(new Point(), 1, new Metal(new Color(20, 1, 20))));
+        BVHNode node = new BVHNode(world);
+        listWorld.add(node);
 
-//        world.add(new MovingSphere(new Point(0, 0, 0), new Point(0, 2, 0), 1, 0, 1, left));
-//        world.add(new Sphere(new Point(2, 0, 0), 1, right));
-//        Util.fillScene(world);
+//        listWorld.add(new Quadrilateral(new Point(0, -1, 0), new Vector(1, 0, 0), new Vector(0, 0, 1), new Metal(Colors.BLACK)));
+//        listWorld.add(new Plane(new Point(0, -1, 0), new Point(1, -1, 0), new Point(0, -1, 1), new Metal(Colors.WHITE)));
 
-        BVHNode bvhNode = new BVHNode(world, 0, 0);
-        listWorld.add(bvhNode);
-//        System.exit(-1);
-        //Camera
-        Point lookFrom = new Point(13, 5, 13);
-//        Point lookFrom = new Point(0, 5, 13);
-        Point lookAt = new Point(0, 1, 0);
+        Point lookFrom = new Point(4, 1, 9);
+        Point lookAt = new Point(0, 0, 0);
         Vector worldNormal = new Vector(0, 1, 0);
-        double fov = 20;
+        double fov = 80;
         double aperture = 0.1;
-        double focusDist = new Vector(lookAt, lookFrom).length();
+        double focusDist = 10;
 
         Camera cameraClear = new ClearCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio);
         Camera cameraBlur = new BlurCamera(lookFrom, lookAt, worldNormal, fov, aspectRatio, aperture, focusDist);
 
-        Camera camera = new MotionBlurCamera(cameraClear, 0, 0);
+        Camera camera = new MotionBlurCamera(cameraClear, 0, 1);
 
         Random random = new Random();
         //Rendering
         writer.write("P3\n" + width + " " + height + "\n255\n");
-        for(int j = height - 1; j > -1; j--){
-            System.out.print("Lines remaining " + (j + 1) + "\r");
-            for(int i = 0; i < width; i++){
+        for (int j = 0; j < height; j++) {
+            System.out.print("Lines remaining " + (height - j) + "\r");
+            for (int i = 0; i < width; i++){
                 Color pixelColor = new Color();
-                for(int s = 0; s < samplesPerPixel; s++){
+                for (int s = 0; s < samplesPerPixel; s++) {
                     double u = ((double) i + random.nextDouble())/(width - 1);
                     double v = ((double) j + random.nextDouble())/(height - 1);
                     Ray ray = camera.getRay(u, v);
                     Color color = rayColor(ray, listWorld, depth).scale(1d/samplesPerPixel);
-//                    Color color = Util.normalColor(ray, world).scale(1d/samplesPerPixel);
                     pixelColor.setRed(pixelColor.getRed() + color.getRed())
                             .setGreen(pixelColor.getGreen() + color.getGreen())
                             .setBlue(pixelColor.getBlue() + color.getBlue());
@@ -126,12 +118,12 @@ public class Main {
     }
 
     private Color rayColor(Ray r, Hittable world, int depth){
-        if(depth <= 0){
+        if (depth <= 0) {
             return new Color(0, 0, 0);
         }
         HitRecord record = new HitRecord();
 
-        if(world.hit(r, 0.00001,  Double.POSITIVE_INFINITY, record)){
+        if(world.hit(r, new Interval(0.00001,  Double.POSITIVE_INFINITY), record)){
             Ray scattered = new Ray();
             Color attenuation = new Color();
             if(record.getMaterial().scatter(r, record, attenuation, scattered)){

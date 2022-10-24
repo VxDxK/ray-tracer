@@ -62,4 +62,7 @@ public class Vectors {
     public static Vector randomUnitVector(){
         return randomInUnitSphere().unit();
     }
+
+    private Vectors() {
+    }
 }

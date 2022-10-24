@@ -21,6 +21,7 @@ public class ImageTexture implements Texture{
             height = bufferedImage.getHeight();
         } catch (IOException e) {
             bufferedImage = null;
+            //TODO
             throw new RuntimeException("Lolz no image found for this texture");
         }
 

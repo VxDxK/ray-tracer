@@ -13,14 +13,11 @@ import math.HitRecord;
  */
 public class Lambertian implements Material{
     private final Texture albedo;
-    private final Color color;
     public Lambertian(Color albedo) {
-        this.color = albedo;
         this.albedo = new SolidColorTexture(albedo);
     }
 
     public Lambertian(Texture texture) {
-        this.color = new Color();
         this.albedo = texture;
     }
 
@@ -32,7 +29,6 @@ public class Lambertian implements Material{
         }
         scattered.setDirection(scatteredDirection).setOrigin(record.getPoint()).setTimeMoment(rayIn.getTimeMoment());
         attenuation.set(albedo.value(record.getU(), record.getV(), record.getPoint()));
-//        attenuation.set(color);
         return true;
     }
 }

@@ -10,40 +10,36 @@ import static java.lang.Math.sin;
 public class CheckerTexture implements Texture{
     private final Texture odd;
     private final Texture even;
-    private double[] coefficients = new double[]{10d, 10d, 10d};
+    private final double scale;
+
     public CheckerTexture(Texture odd, Texture even) {
+        this(1, odd, even);
+    }
+
+    public CheckerTexture(Color odd, Color even) {
+        this(1, odd, even);
+    }
+
+    public CheckerTexture(double scale, Texture odd, Texture even) {
+        this.scale = scale;
         this.odd = odd;
         this.even = even;
     }
 
-    public CheckerTexture(Color odd, Color even) {
+    public CheckerTexture(double scale, Color odd, Color even) {
+        this.scale = scale;
         this.odd = new SolidColorTexture(odd);
         this.even = new SolidColorTexture(even);
     }
 
     @Override
     public Color value(double u, double v, Point p) {
-        double sines = sin(coefficients[0] * p.getX()) * sin(coefficients[1] * p.getY()) * sin(coefficients[2] * p.getZ());
-        if(sines <= 0){
-            return odd.value(u, v, p);
-        }else{
-            return even.value(u, v, p);
-        }
+        int x = (int) (scale * p.getX());
+        int y = (int) (scale * p.getY());
+        int z = (int) (scale * p.getZ());
+        boolean isSumEven = (x + y + z) % 2 == 0;
+
+        return isSumEven ? even.value(u, v, p) : odd.value(u, v, p);
     }
 
-    public double[] getCoefficients() {
-        return coefficients;
-    }
-
-    public CheckerTexture setCoefficients(double[] coefficients) {
-        this.coefficients = coefficients;
-        return this;
-    }
-    public CheckerTexture setCoefficient(int index, double value){
-        if(index > 2 || index < 0){
-            throw new UnsupportedOperationException("index out of range");
-        }
-        coefficients[index] = value;
-        return this;
-    }
 }

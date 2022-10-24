@@ -1,22 +1,23 @@
 package util.collections.impl;
 
+import math.Interval;
 import math.Ray;
 import objects.AABB;
 import math.HitRecord;
 import objects.Boundable;
 import objects.Hittable;
-import util.collections.AbstractBoundingList;
+import util.collections.AbstractBoundableList;
 import util.collections.HittableList;
 
 import java.util.ArrayList;
 
-public class BoundingArrayList extends AbstractBoundingList {
-    public BoundingArrayList() {
+public class BoundableArrayList extends AbstractBoundableList {
+    public BoundableArrayList() {
         super(new ArrayList<>());
     }
 
     @Override
-    public AABB boundingBox(double time0, double time1) {
+    public AABB boundingBox() {
         if(this.list.isEmpty()){
             throw new RuntimeException("Empty BoundingArrayList");
         }
@@ -25,9 +26,9 @@ public class BoundingArrayList extends AbstractBoundingList {
 
         for(Boundable i : this){
             if(firstBox){
-                tmpBox = i.boundingBox(time0, time1);
+                tmpBox = i.boundingBox();
             }else{
-                tmpBox = (AABB.surroundingBox(i.boundingBox(time0, time1), tmpBox));
+                tmpBox = (AABB.surroundingBox(i.boundingBox(), tmpBox));
             }
             firstBox = false;
         }
@@ -35,13 +36,13 @@ public class BoundingArrayList extends AbstractBoundingList {
     }
 
     @Override
-    public boolean hit(Ray r, double tMin, double tMax, HitRecord rec) {
+    public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
         HitRecord tempHit = new HitRecord();
         boolean hitAnything = false;
-        double closestSoFar = tMax;
+        double closestSoFar = tInterval.getMax();
 
         for (Hittable i: this) {
-            if(i.hit(r, tMin, closestSoFar, tempHit)){
+            if(i.hit(r, new Interval(tInterval.getMin(), closestSoFar), tempHit)){
                 hitAnything = true;
                 closestSoFar = tempHit.getT();
                 rec.set(tempHit);
@@ -56,5 +57,12 @@ public class BoundingArrayList extends AbstractBoundingList {
         HittableList list = new HittableArrayList();
         list.addAll(this);
         return list;
+    }
+
+    @Override
+    public String toString() {
+        return "BoundableArrayList{" +
+                "list=" + list +
+                '}';
     }
 }

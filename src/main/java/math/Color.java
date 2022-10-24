@@ -2,6 +2,8 @@ package math;
 
 import java.util.Objects;
 
+import static util.Util.clamp;
+
 public class Color {
     //[0;1]
     private double red = 0d;
@@ -37,6 +39,18 @@ public class Color {
     }
 
 
+    public int toRGB(){
+        int r = (int)(256 * clamp(red, 0d, 0.999));
+        int g = (int)(256 * clamp(green, 0d, 0.999));
+        int b = (int)(256 * clamp(blue, 0d, 0.999));
+
+        int ans = 0;
+        ans += (r << 16);
+        ans += (g << 8);
+        ans += b;
+
+        return ans & 0xffffff;
+    }
 
     public static Color getByRGB(int r, int g, int b){
         return new Color((float)r/255, (float)g/255, (float)b/255);

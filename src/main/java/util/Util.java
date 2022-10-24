@@ -1,6 +1,7 @@
 package util;
 
 import math.*;
+import util.collections.BoundableList;
 import util.collections.HittableList;
 import material.Dielectric;
 import material.Lambertian;
@@ -24,7 +25,7 @@ public class Util {
     public static Color normalColor(Ray r, Hittable world) {
         HitRecord record = new HitRecord();
 
-        if (world.hit(r, 0, Double.POSITIVE_INFINITY, record)) {
+        if (world.hit(r, new Interval(0, Double.POSITIVE_INFINITY), record)) {
             Vector normal = record.getNormal();
             return new Color(0.5 * (normal.getX() + 1), 0.5 * (normal.getY() + 1), 0.5 * (normal.getZ() + 1));
         }
@@ -35,10 +36,10 @@ public class Util {
         return new Color((1.0 - t) + (t * 0.5), (1.0 - t) + (t * 0.7), (1.0 - t) + (t));
     }
 
-    public static void fillScene(HittableList world) {
+    public static void fillScene(BoundableList world) {
         for (int x = -11; x < 11; x++) {
             for (int z = -11; z < 11; z++) {
-                Point location = new Point(x + random() * 0.9, -0.8, z + random() * 0.9);
+                Point location = new Point(x + random() * 0.9, 0.5, z + random() * 0.9);
                 if (new Vector(new Point(0, 0.2, 0), location).length() > 3) {
                     double rand = random();
                     if (rand < 0.50) {

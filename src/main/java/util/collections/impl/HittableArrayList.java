@@ -1,5 +1,6 @@
 package util.collections.impl;
 
+import math.Interval;
 import objects.AABB;
 import math.HitRecord;
 import objects.Hittable;
@@ -14,13 +15,13 @@ public class HittableArrayList extends AbstractHittableList {
     }
 
     @Override
-    public boolean hit(Ray r, double tMin, double tMax, HitRecord rec) {
+    public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
         HitRecord tempHit = new HitRecord();
         boolean hitAnything = false;
-        double closestSoFar = tMax;
+        double closestSoFar = tInterval.getMax();
 
         for (Hittable i: this) {
-            if(i.hit(r, tMin, closestSoFar, tempHit)){
+            if(i.hit(r, new Interval(tInterval.getMin(), closestSoFar), tempHit)){
                 hitAnything = true;
                 closestSoFar = tempHit.getT();
                 rec.set(tempHit);

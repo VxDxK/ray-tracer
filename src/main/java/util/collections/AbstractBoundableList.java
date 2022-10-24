@@ -4,17 +4,13 @@ import objects.Boundable;
 
 import java.util.*;
 
-public abstract class AbstractBoundingList implements BoundingList{
+public abstract class AbstractBoundableList implements BoundableList {
     protected List<Boundable> list;
 
-    public AbstractBoundingList(List<Boundable> list) {
+    public AbstractBoundableList(List<Boundable> list) {
         this.list = list;
     }
 
-    @Override
-    public List<Boundable> getList() {
-        return list;
-    }
 
     @Override
     public int size() {

@@ -1,95 +1,85 @@
 package objects;
 
-import math.Point;
-import math.Points;
-import math.Ray;
-import math.Vectors;
+import math.*;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class AABB {
-    private Point min;
-    private Point max;
+    private final Interval xInterval;
+    private final Interval yInterval;
+    private final Interval zInterval;
+
 
     public AABB() {
         this(new Point(), new Point());
     }
 
+
+
     public AABB(Point min, Point max) {
-        this.min = min;
-        this.max = max;
+        xInterval = new Interval(Math.min(min.getX(), max.getX()), Math.max(min.getX(), max.getX()));
+        yInterval = new Interval(Math.min(min.getY(), max.getY()), Math.max(min.getY(), max.getY()));
+        zInterval = new Interval(Math.min(min.getZ(), max.getZ()), Math.max(min.getZ(), max.getZ()));
     }
 
-    public boolean hit(Ray r, double tMin, double tMax){
-        double t_min = tMin;
-        double t_max = tMax;
-        double[] minPointArray = Points.toArray(min);
-        double[] maxPointArray = Points.toArray(max);
-        double[] directionVectorArray = Vectors.toArray(r.getDirection());
-        double[] originPointArray = Points.toArray(r.getOrigin());
-        for (int a = 0; a < 3; a++){
-            double invD = 1f/directionVectorArray[a];
-            double t0 = (minPointArray[a] - originPointArray[a]) * invD;
-            double t1 = (maxPointArray[a] - originPointArray[a]) * invD;
+    public AABB(Interval xInterval, Interval yInterval, Interval zInterval) {
+        this.xInterval = xInterval;
+        this.yInterval = yInterval;
+        this.zInterval = zInterval;
+    }
 
-            if(invD < 0f){
-                double tmp = t1;
-                t1 = t0;
-                t0 = tmp;
-            }
+    public boolean hit(Ray r, Interval tInterval){
+        Interval[] axis = {xInterval, yInterval, zInterval};
+        double[] vecAxis = Vectors.toArray(r.getDirection());
+        double[] pointCo = Points.toArray(r.getOrigin());
+        Interval tmpInterval = new Interval(tInterval);
+        for (int i = 0; i < 3; i++){
+            double t0 = Math.min((axis[i].getMin() - pointCo[i])/ vecAxis[i], (axis[i].getMax() - pointCo[i])/vecAxis[i]);
+            double t1 = Math.max((axis[i].getMin() - pointCo[i])/vecAxis[i], (axis[i].getMax() - pointCo[i])/vecAxis[i]);
 
-            t_min = max(t0, t_min);
-            t_max = min(t1, t_max);
+            tmpInterval.setMin(Math.max(t0, tmpInterval.getMin()));
+            tmpInterval.setMax(Math.min(t1, tmpInterval.getMax()));
 
-            if(t_max <= t_min){
+            if (tmpInterval.getMax() <= tmpInterval.getMin())
                 return false;
-            }
         }
         return true;
     }
 
-    public AABB setMin(Point min) {
-        this.min = min;
-        return this;
+    public Interval getX() {
+        return xInterval;
     }
 
-    public AABB setMax(Point max) {
-        this.max = max;
-        return this;
+    public Interval getY() {
+        return yInterval;
     }
 
-    public AABB set(AABB aabb){
-        this.min = aabb.getMin();
-        this.max = aabb.getMax();
-        return this;
-    }
-
-    public Point getMin() {
-        return min;
-    }
-
-    public Point getMax() {
-        return max;
+    public Interval getZ() {
+        return zInterval;
     }
 
     public static AABB surroundingBox(AABB box0, AABB box1){
-        Point small = new Point(min(box0.getMin().getX(), box1.getMin().getX()),
-                min(box0.getMin().getY(), box1.getMin().getY()),
-                min(box0.getMin().getZ(), box1.getMin().getZ()));
+        Interval x = new Interval(box0.xInterval, box1.xInterval);
+        Interval y = new Interval(box0.yInterval, box1.yInterval);
+        Interval z = new Interval(box0.zInterval, box1.zInterval);
+        return new AABB(x, y, z);
+    }
 
-        Point big = new Point(max(box0.getMax().getX(), box1.getMax().getX()),
-                max(box0.getMax().getY(), box1.getMax().getY()),
-                max(box0.getMax().getZ(), box1.getMax().getZ()));
-
-        return new AABB(small, big);
+    public AABB pad(){
+        double delta = 0.0001;
+        Interval newX = (xInterval.size() >= delta) ? xInterval : xInterval.expand(delta);
+        Interval newY = (yInterval.size() >= delta) ? yInterval : yInterval.expand(delta);
+        Interval newZ = (zInterval.size() >= delta) ? zInterval : zInterval.expand(delta);
+        return new AABB(newX, newY, newZ);
     }
 
     @Override
     public String toString() {
         return "AABB{" +
-                "min=" + min +
-                ", max=" + max +
+                "xInterval=" + xInterval +
+                ", yInterval=" + yInterval +
+                ", zInterval=" + zInterval +
                 '}';
     }
 }

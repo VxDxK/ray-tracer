@@ -1,11 +1,12 @@
 package objects;
 
+import math.Interval;
 import math.Ray;
 import objects.comparator.XComparator;
 import objects.comparator.YComparator;
 import objects.comparator.ZComparator;
 import math.HitRecord;
-import util.collections.BoundingList;
+import util.collections.BoundableList;
 
 import java.util.*;
 
@@ -14,72 +15,69 @@ public class BVHNode implements Boundable {
     private final Boundable right;
     private final AABB box;
 
-    private static final List<Comparator<Hittable>> comparators = List.of(new XComparator(), new YComparator(), new ZComparator());
 
-    public BVHNode(BoundingList hittableList, double time0, double time1){
-        this(hittableList.getList(), 0, hittableList.getList().size(), time0, time1);
+    private final List<Comparator<Boundable>> comparators = List.of(new XComparator(), new YComparator(), new ZComparator());
+
+    public BVHNode(BoundableList list) {
+        this(list, 0, list.size());
     }
 
-    public BVHNode(List<Boundable> objects, int start, int end, double time0, double time1){
-        Random random = new Random();
-        int axis = random.nextInt(0, 3);
-        Comparator<Hittable> comparator = comparators.get(axis);
+    public BVHNode(BoundableList list, int begin, int end) {
+        if(list.isEmpty()){
+            left = new Boundable() {
+                @Override
+                public AABB boundingBox() {
+                    return new AABB();
+                }
 
-        long span = end - start;
+                @Override
+                public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
+                    return false;
+                }
+            };
+            right = left;
+            box = AABB.surroundingBox(left.boundingBox(), right.boundingBox());
+            return;
+        }
+        Random random = new Random();
+        Comparator<Boundable> comparator = comparators.get(random.nextInt(0, 3));
+        int span = end - begin;
         if(span == 1){
-            left = objects.get(start);
+            left = list.get(begin);
             right = left;
         }else if(span == 2){
-            left = objects.get(start);
-            right = objects.get(start + 1);
+            left = list.get(begin);
+            right = list.get(begin + 1);
         }else{
-            objects.subList(start, end).sort(comparator);
-            int mid = start + (int)span/2;
-            left = new BVHNode(objects, start, mid, time0, time1);
-            right = new BVHNode(objects, mid, end, time0, time1);
+            list.subList(begin, end).sort(comparator);
+            int mid = begin + span / 2;
+            left = new BVHNode(list, begin, mid);
+            right = new BVHNode(list, mid, end);
         }
-        AABB boxLeft = left.boundingBox(time0, time1);
-        AABB boxRight = right.boundingBox(time0, time1);
+        box = AABB.surroundingBox(left.boundingBox(), right.boundingBox());
+    }
 
-        box = AABB.surroundingBox(boxLeft, boxRight);
+
+    @Override
+    public AABB boundingBox() {
+        return box;
     }
 
     @Override
-    public boolean hit(Ray r, double tMin, double tMax, HitRecord rec) {
-        if(!box.hit(r, tMin, tMax)){
+    public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
+        if(!box.hit(r, tInterval))
             return false;
-        }
-
-        boolean hitLeft = left.hit(r, tMin, tMax, rec);
-        boolean hitRight = right.hit(r, tMin, hitLeft ? rec.getT() : tMax, rec);
+        boolean hitLeft = left.hit(r, tInterval, rec);
+        boolean hitRight = right.hit(r, new Interval(tInterval.getMin(), hitLeft ? rec.getT() : tInterval.getMax()), rec);
         return hitLeft || hitRight;
     }
 
     @Override
-    public AABB boundingBox(double time0, double time1) {
-        return box;
-    }
-
-    public Hittable getLeft() {
-        return left;
-    }
-
-    public Hittable getRight() {
-        return right;
-    }
-
-    public AABB getBox() {
-        return box;
-    }
-
-    @Override
     public String toString() {
-        return "BVHNode{\n" +
-                "box=" + box +
-                ", left=" + left +
-                ", right=" + right +
+        return "BVHNode{" +
+                ", box=" + box +
+                "\nleft=" + left +
+                ", \nright=" + right +
                 '}';
     }
-
-
 }

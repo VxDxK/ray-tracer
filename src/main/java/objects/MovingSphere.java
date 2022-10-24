@@ -1,10 +1,6 @@
 package objects;
 
-import math.Point;
-import math.Ray;
-import math.Vector;
-import math.Vectors;
-import math.HitRecord;
+import math.*;
 import material.Material;
 
 public class MovingSphere implements Boundable {
@@ -14,7 +10,7 @@ public class MovingSphere implements Boundable {
     private final double timeFinish;
     private final double radius;
     private final Material material;
-
+    private final AABB box;
     public MovingSphere(Point centerStart, Point centerFinish, double radius, double timeStart, double timeFinish,  Material material) {
         this.centerStart = centerStart;
         this.centerFinish = centerFinish;
@@ -22,10 +18,16 @@ public class MovingSphere implements Boundable {
         this.timeFinish = timeFinish;
         this.radius = radius;
         this.material = material;
+
+        Vector rVector = new Vector(radius, radius, radius);
+
+        AABB box0 = new AABB(centerStart.move(rVector.negate()), centerStart.move(rVector));
+        AABB box1 = new AABB(centerFinish.move(rVector.negate()), centerFinish.move(rVector));
+        box = AABB.surroundingBox(box0, box1);
     }
 
     @Override
-    public boolean hit(Ray r, double tMin, double tMax, HitRecord rec) {
+    public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
         Vector oc = new Vector(center(r.getTimeMoment()), r.getOrigin());
         double A = r.getDirection().lengthSquared();
         double halfB = Vectors.dot(oc, r.getDirection());
@@ -36,9 +38,9 @@ public class MovingSphere implements Boundable {
         }
         double sqrtd = Math.sqrt(discriminant);
         double root = (-halfB - sqrtd) / A;
-        if (root < tMin || tMax < root) {
+        if (!tInterval.contains(root)) {
             root = (-halfB + sqrtd) / A;
-            if (root < tMin || tMax < root)
+            if (!tInterval.contains(root))
                 return false;
         }
 
@@ -52,13 +54,8 @@ public class MovingSphere implements Boundable {
 
 
     @Override
-    public AABB boundingBox(double time0, double time1) {
-        AABB box0 = new AABB(center(time0).move(new Vector(radius, radius, radius).negate()),
-                center(time0).move(new Vector(radius, radius, radius)));
-
-        AABB box1 = new AABB(center(time1).move(new Vector(radius, radius, radius).negate()),
-                center(time1).move(new Vector(radius, radius, radius)));
-        return AABB.surroundingBox(box0, box1);
+    public AABB boundingBox() {
+        return box;
     }
 
     private Point center(double time){
