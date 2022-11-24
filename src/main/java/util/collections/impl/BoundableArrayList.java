@@ -27,10 +27,10 @@ public class BoundableArrayList extends AbstractBoundableList {
         for(Boundable i : this){
             if(firstBox){
                 tmpBox = i.boundingBox();
+                firstBox = false;
             }else{
                 tmpBox = (AABB.surroundingBox(i.boundingBox(), tmpBox));
             }
-            firstBox = false;
         }
         return tmpBox;
     }

@@ -26,7 +26,7 @@ public class Interval {
     }
 
     public Interval expand(double delta){
-        return new Interval(min + delta/2, max + delta/2);
+        return new Interval(min - delta/2, max + delta/2);
     }
 
     public Interval scale(double t){

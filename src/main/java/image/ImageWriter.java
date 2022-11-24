@@ -40,4 +40,9 @@ public class ImageWriter {
     public void writeToFile(Path file, BufferedImage bufferedImage) throws IOException {
         writeToFile(file, bufferedImage, OutputFormat.PNG);
     }
+
+    public void writeToFile(Path file, Image image) throws IOException{
+        writeToFile(file, write(image));
+    }
+
 }

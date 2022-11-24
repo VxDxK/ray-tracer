@@ -15,9 +15,6 @@ public class BVHNode implements Boundable {
     private final Boundable right;
     private final AABB box;
 
-
-    private final List<Comparator<Boundable>> comparators = List.of(new XComparator(), new YComparator(), new ZComparator());
-
     public BVHNode(BoundableList list) {
         this(list, 0, list.size());
     }
@@ -27,7 +24,12 @@ public class BVHNode implements Boundable {
             left = new Boundable() {
                 @Override
                 public AABB boundingBox() {
-                    return new AABB();
+                    return new AABB(){
+                        @Override
+                        public boolean hit(Ray r, Interval tInterval) {
+                            return false;
+                        }
+                    };
                 }
 
                 @Override
@@ -40,6 +42,7 @@ public class BVHNode implements Boundable {
             return;
         }
         Random random = new Random();
+        List<Comparator<Boundable>> comparators = List.of(new XComparator(), new YComparator(), new ZComparator());
         Comparator<Boundable> comparator = comparators.get(random.nextInt(0, 3));
         int span = end - begin;
         if(span == 1){

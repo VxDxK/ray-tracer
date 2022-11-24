@@ -10,12 +10,22 @@ public class HitRecord{
     private double u;
     private double v;
     private boolean frontFace = true;
-    private  Material material;
+    private Material material;
+
     public HitRecord() {
     }
 
+    public HitRecord(HitRecord record){
+        this.point = new Point(record.getPoint());
+        this.normal = new Vector(record.getNormal());
+        this.t = record.getT();
+        this.u = record.getU();
+        this.v = record.getV();
+        this.frontFace = record.isFrontFace();
+        this.material = record.getMaterial();
+    }
 
-    public void set(HitRecord record){
+    public HitRecord set(HitRecord record){
         point = record.point;
         normal = record.normal;
         t = record.t;
@@ -23,6 +33,7 @@ public class HitRecord{
         v = record.v;
         frontFace = record.frontFace;
         material = record.getMaterial();
+        return this;
     }
 
     public HitRecord setFaceNormal(Ray r, Vector outwardNormal){

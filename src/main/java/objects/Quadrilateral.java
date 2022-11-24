@@ -21,10 +21,12 @@ public class Quadrilateral extends Plane implements Boundable{
 
     @Override
     public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
-        if (!super.hit(r, tInterval, rec))
+        HitRecord record = new HitRecord();
+        if (!super.hit(r, tInterval, record))
             return false;
 
-        Vector hitVector = new Vector(p, rec.getPoint());
+        Point intersect = r.at(record.getT());
+        Vector hitVector = new Vector(p, intersect);
         double alpha = Vectors.dot(w, Vectors.cross(hitVector, v));
         double beta = Vectors.dot(w, Vectors.cross(u, hitVector));
 
@@ -32,7 +34,7 @@ public class Quadrilateral extends Plane implements Boundable{
         if(!testInterval.contains(alpha) || !testInterval.contains(beta))
             return false;
 
-        rec.setU(alpha).setV(beta);
+        rec.set(record).setU(alpha).setV(beta);
         return true;
     }
 }

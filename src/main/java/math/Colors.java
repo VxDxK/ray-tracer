@@ -7,8 +7,13 @@ public class Colors {
     public final static Color BLUE = new ImmutableColor(0, 0, 1);
     public final static Color BLACK = new ImmutableColor(0, 0, 0);
     public final static Color PURPLE = ImmutableColor.getByRGB(128,0,128);
+    
     public static Color add(Color a, Color b){
         return new Color(a.getRed() + b.getRed(), a.getGreen() + b.getGreen(), a.getBlue() + b.getBlue());
+    }
+
+    public static Color multiply(Color a, Color b){
+        return new Color(a.getRed() * b.getRed(), a.getGreen() * b.getGreen(), a.getBlue() * b.getBlue());
     }
 
     public static class ImmutableColor extends Color{

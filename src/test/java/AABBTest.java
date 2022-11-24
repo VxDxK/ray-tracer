@@ -1,5 +1,6 @@
 import math.Interval;
 import math.Point;
+import math.Vector;
 import objects.AABB;
 import org.junit.jupiter.api.Test;
 
@@ -16,5 +17,12 @@ class AABBTest {
         assertEquals(y, new Interval(2, 4));
         assertEquals(z, new Interval(3, 5));
 
+    }
+
+    @Test
+    void padTest(){
+        AABB aabb = new AABB(new Point(0, 0, 0), new Point(0, 0, 0).move(new  Vector(0, 0, 2)).move(new Vector(2, 0, 0)));
+        AABB padded = aabb.pad();
+        assertNotEquals(padded.getY().size(), 0d);
     }
 }

@@ -67,7 +67,7 @@ public class AABB {
     }
 
     public AABB pad(){
-        double delta = 0.0001;
+        double delta = 0.1;
         Interval newX = (xInterval.size() >= delta) ? xInterval : xInterval.expand(delta);
         Interval newY = (yInterval.size() >= delta) ? yInterval : yInterval.expand(delta);
         Interval newZ = (zInterval.size() >= delta) ? zInterval : zInterval.expand(delta);
