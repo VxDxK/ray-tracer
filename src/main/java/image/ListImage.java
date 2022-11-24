@@ -1,5 +1,6 @@
 package image;
 
+import math.Color;
 import util.Pair;
 
 import java.util.ArrayList;
@@ -25,5 +26,18 @@ public class ListImage implements Image{
     @Override
     public Pair<Integer, Integer> getSize() {
         return new Pair<Integer, Integer>(xLen, yLen);
+    }
+
+    @Override
+    public Color getColor(int x, int y) {
+        if(x >= xLen || y >= yLen){
+            throw new IllegalArgumentException("Coordinate out of image size");
+        }
+        for (Pixel px: list) {
+            if(px.getX() == x && px.getY() == y){
+                return px.getColor();
+            }
+        }
+        throw new IllegalStateException("No color in this coordinate");
     }
 }

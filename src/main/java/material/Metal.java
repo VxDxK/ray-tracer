@@ -40,7 +40,10 @@ public class Metal implements Material{
         scattered.setOrigin(record.getPoint())
                 .setDirection(reflected.add(Vectors.randomInUnitSphere().multiply(fuzz)))
                 .setTimeMoment(rayIn.getTimeMoment());
-        attenuation.set(albedo.value(record.getU(), record.getV(), record.getPoint()));
-        return Vectors.dot(scattered.getDirection(), record.getNormal()) > 0;
+
+        boolean scatter = Vectors.dot(scattered.getDirection(), record.getNormal()) > 0;
+        if (scatter)
+            attenuation.set(albedo.value(record.getU(), record.getV(), record.getPoint()));
+        return scatter;
     }
 }

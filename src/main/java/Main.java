@@ -8,6 +8,7 @@ import camera.ClearCamera;
 import objects.*;
 import math.HitRecord;
 import texture.ImageTexture;
+import texture.MarbleTexture;
 import texture.Texture;
 import util.collections.impl.BoundableArrayList;
 import util.collections.impl.HittableArrayList;
@@ -39,6 +40,8 @@ public class Main {
         Convertor.main(args);
     }
 
+    private final Color background = new Color(0.7, 0.8, 1);
+
     public Main(BufferedWriter writer) throws IOException {
         //Image
         double aspectRatio = 16.0/9.0;
@@ -52,41 +55,23 @@ public class Main {
         Path earth = Paths.get("src", "main", "resources", "earthrealistic.jpg");
         Texture earthTexture = new ImageTexture(earth);
 
-//        world.add(new Sphere(new Point(0, -1000, 0), 999, new Metal(new Color(1, 1, 1), 0.5)));
-//        world.add(new Sphere(new Point(0, -1000, 0), 999, new Metal(new Color(0.1, 0.1, 0.1), 0.5)));
-//        Boundable boundable = new Quadrilateral(new Point(0, 0, 0), new Vector(1, 4, 0), new Vector(0, 0.5, 1), new Lambertian(Colors.BLUE));
+        Texture pertext = new MarbleTexture();
 
-        if(false){
-            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(0,0,-6), new Vector(0,6,0), new Lambertian(Colors.RED)));
-            listWorld.add(new Quadrilateral(new Point(-2,-3,0), new Vector(6,0,0), new Vector(0,7,0), new Lambertian(Colors.WHITE)));
-            listWorld.add(new Quadrilateral(new Point(-2,3,0), new Vector(6,0,0), new Vector(0,0,6), new Lambertian(Colors.GREEN)));
-            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(6,0,0), new Vector(0,0,-6), new Lambertian(Colors.BLACK)));
-        }else{
-            double fuzz = 0.0;
-            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(0,0,-6), new Vector(0,6,0), new Metal(Colors.WHITE, fuzz)));
-//            listWorld.add(new Quadrilateral(new Point(-2,-3,0), new Vector(6,0,0), new Vector(0,7,0), new Metal(Colors.WHITE, fuzz)));
-            listWorld.add(new Quadrilateral(new Point(-2,3,0), new Vector(6,0,0), new Vector(0,0,6), new Metal(Colors.WHITE, fuzz)));
-            listWorld.add(new Quadrilateral(new Point(-2,-3,6), new Vector(6,0,0), new Vector(0,0,-6), new Metal(Colors.WHITE, fuzz)));
-        }
-        listWorld.add(new Sphere(new Point(0, -1000, 0), 997, new Lambertian(new Color(0.7, 0.7, 0.8))));
-        listWorld.add(new Sphere(new Point(2, 0, 3), 1, new Lambertian(Colors.PURPLE)));
+        world.add(new Sphere(new Point(0,-1000,0), 1000, new Lambertian(pertext)));
+        world.add(new Sphere(new Point(0,2,0), 2, new Lambertian(pertext)));
+
+//        Material material = new DiffuseLight(new Color(4, 4, 4));
+        Material material = new Lambertian(new Color(4, 4, 4));
+
+        world.add(new Quadrilateral(new Point(3, 1, -2), new Vector(2, 0, 0), new Vector(0, 2, 0), material));
 
 
+        listWorld.add(new BVHNode(world));
 
-        //        world.add(new Sphere(new Point(0.5, 0, 0.5), 1, new Metal(Colors.RED)));
-//        world.add(new Sphere(new Point(0.5, 0, 3.5), 1, new Dielectric(1.5, Colors.WHITE)));
-//        world.add(new Sphere(new Point(), 1, new Lambertian(earthTexture)));
-//        world.add(new Sphere(new Point(), 1, new Metal(new Color(20, 1, 20))));
-        BVHNode node = new BVHNode(world);
-        listWorld.add(node);
-
-//        listWorld.add(new Quadrilateral(new Point(0, -1, 0), new Vector(1, 0, 0), new Vector(0, 0, 1), new Metal(Colors.BLACK)));
-//        listWorld.add(new Plane(new Point(0, -1, 0), new Point(1, -1, 0), new Point(0, -1, 1), new Metal(Colors.WHITE)));
-
-        Point lookFrom = new Point(4, 1, 9);
-        Point lookAt = new Point(0, 0, 0);
+        Point lookFrom = new Point(26, 3, 26);
+        Point lookAt = new Point(0, 2, 0);
         Vector worldNormal = new Vector(0, 1, 0);
-        double fov = 80;
+        double fov = 20;
         double aperture = 0.1;
         double focusDist = 10;
 
@@ -123,22 +108,44 @@ public class Main {
         }
         HitRecord record = new HitRecord();
 
-        if(world.hit(r, new Interval(0.00001,  Double.POSITIVE_INFINITY), record)){
-            Ray scattered = new Ray();
-            Color attenuation = new Color();
-            if(record.getMaterial().scatter(r, record, attenuation, scattered)){
-                Color newColor = rayColor(scattered, world, depth - 1);
-                return attenuation.setRed(attenuation.getRed() * newColor.getRed())
-                        .setGreen(attenuation.getGreen() * newColor.getGreen())
-                        .setBlue(attenuation.getBlue() * newColor.getBlue());
-            }
-            return new Color(0, 0, 0);
+        if(!world.hit(r, new Interval(0.00001,  Double.POSITIVE_INFINITY), record)){
+            return background;
         }
 
-        Vector unitDirection = r.getDirection().unit();
-        double t = 0.5 * (unitDirection.getY() + 1.0);
-        return new Color((1.0 - t) + (t * 0.5), (1.0 - t) + (t * 0.7), (1.0 - t) + (t));
+        Ray scattered = new Ray();
+        Color attenuation = new Color();
+        Color fromEmission = record.getMaterial().emitted(record.getU(), record.getV(), record.getPoint());
+
+        if(!record.getMaterial().scatter(r, record, attenuation, scattered))
+            return fromEmission;
+
+        Color color = new Color();
+        Color fromScatter = rayColor(scattered, world, depth - 1);
+        return Colors.add(fromEmission, fromScatter);
     }
+
+//    private Color rayColor(Ray r, Hittable world, int depth){
+//        if (depth <= 0) {
+//            return new Color(0, 0, 0);
+//        }
+//        HitRecord record = new HitRecord();
+//
+//        if(world.hit(r, new Interval(0.00001,  Double.POSITIVE_INFINITY), record)){
+//            Ray scattered = new Ray();
+//            Color attenuation = new Color();
+//            if(record.getMaterial().scatter(r, record, attenuation, scattered)){
+//                Color newColor = rayColor(scattered, world, depth - 1);
+//                return attenuation.setRed(attenuation.getRed() * newColor.getRed())
+//                        .setGreen(attenuation.getGreen() * newColor.getGreen())
+//                        .setBlue(attenuation.getBlue() * newColor.getBlue());
+//            }
+//            return new Color(0, 0, 0);
+//        }
+//
+//        Vector unitDirection = r.getDirection().unit();
+//        double t = 0.5 * (unitDirection.getY() + 1.0);
+//        return new Color((1.0 - t) + (t * 0.5), (1.0 - t) + (t * 0.7), (1.0 - t) + (t));
+//    }
 
 
     private void writeColor(BufferedWriter writer, Color color, Function<Double, Double> gammaCorrectionFunction) throws IOException {
