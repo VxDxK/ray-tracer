@@ -1,15 +1,13 @@
-package util;
+package objects;
 
-import math.Point;
-import math.Ray;
-import math.Vector;
-import math.Vectors;
-import util.material.Material;
+import math.*;
+import material.Material;
+import util.Pair;
 
-public class Sphere implements Hittable {
+public class Sphere implements Boundable {
     private Point center;
     private double radius;
-    private Material material;
+    private final Material material;
 
     public Sphere(Point center, double radius, Material material) {
         this.center = center;
@@ -18,7 +16,7 @@ public class Sphere implements Hittable {
     }
 
     @Override
-    public boolean hit(Ray r, double tMin, double tMax, HitRecord rec) {
+    public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
         Vector oc = new Vector(center, r.getOrigin());
         double A = r.getDirection().lengthSquared();
         double halfB = Vectors.dot(oc, r.getDirection());
@@ -29,18 +27,29 @@ public class Sphere implements Hittable {
         }
         double sqrtd = Math.sqrt(discriminant);
         double root = (-halfB - sqrtd) / A;
-        if (root < tMin || tMax < root) {
+        if (!tInterval.contains(root)) {
             root = (-halfB + sqrtd) / A;
-            if (root < tMin || tMax < root)
+            if (!tInterval.contains(root))
                 return false;
         }
 
-        rec.setT(root);
-        rec.setPoint(r.at(rec.getT()));
+        rec.setT(root)
+                .setPoint(r.at(rec.getT()));
         Vector outwardNormal = new Vector(center, rec.getPoint()).divide(radius);
-        rec.setFaceNormal(r, outwardNormal);
-        rec.setMaterial(this.material);
+        rec.setFaceNormal(r, outwardNormal)
+                .setMaterial(this.material).setUV(getHitCoordinates(new Point().move(outwardNormal)));
         return true;
+    }
+
+    @Override
+    public AABB boundingBox() {
+        return new AABB(center.move(new Vector(radius, radius, radius).negate()), center.move(new Vector(radius, radius, radius)));
+    }
+
+    private Pair<Double, Double> getHitCoordinates(Point point){
+        double u = (Math.atan2(-point.getZ(), point.getX()) + Math.PI) / (2 * Math.PI);
+        double v = Math.acos(-point.getY())/Math.PI;
+        return new Pair<>(u, v);
     }
 
     public Point getCenter() {
@@ -58,4 +67,6 @@ public class Sphere implements Hittable {
     public void setRadius(double radius) {
         this.radius = radius;
     }
+
+
 }

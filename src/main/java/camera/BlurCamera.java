@@ -1,10 +1,9 @@
-package util.camera;
+package camera;
 
 import math.Point;
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.camera.Camera;
 
 public class BlurCamera implements Camera {
     private final Point origin;
@@ -38,7 +37,7 @@ public class BlurCamera implements Camera {
         Vector rd = Vectors.randomInUnitSphere().multiply(lensRadius);
         Vector offset = u.multiply(rd.getX()).add(v.multiply(rd.getY()));
 
-        Vector vector = horizontal.multiply(s).add(vertical.multiply(t));
+        Vector vector = horizontal.multiply(s).add(vertical.multiply(1 - t));
 
         return new Ray(origin.move(offset), new Vector(origin, lowerLeftCorner).add(vector).subtract(offset));
     }

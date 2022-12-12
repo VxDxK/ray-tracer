@@ -1,6 +1,8 @@
-package util;
+package math;
 
 import java.util.Objects;
+
+import static util.Util.clamp;
 
 public class Color {
     //[0;1]
@@ -15,9 +17,6 @@ public class Color {
         this.red = red;
         this.green = green;
         this.blue = blue;
-//        if(!(inRange(red) && inRange(green) && inRange(blue))){
-//            throw new IllegalArgumentException("Color not in range: " + this);
-//        }
     }
 
     public Color(Color color){
@@ -32,6 +31,31 @@ public class Color {
         this.blue = color.getBlue();
     }
 
+    public static Color getByRGB(int rgb){
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = (rgb) & 0xff;
+        return getByRGB(r, g, b);
+    }
+
+
+    public int toRGB(){
+        int r = (int)(256 * clamp(red, 0d, 0.999));
+        int g = (int)(256 * clamp(green, 0d, 0.999));
+        int b = (int)(256 * clamp(blue, 0d, 0.999));
+
+        int ans = 0;
+        ans += (r << 16);
+        ans += (g << 8);
+        ans += b;
+
+        return ans & 0xffffff;
+    }
+
+    public static Color getByRGB(int r, int g, int b){
+        return new Color((float)r/255, (float)g/255, (float)b/255);
+    }
+
     public Color scale(double t){
         return new Color(red * t, green * t, blue * t);
     }
@@ -41,9 +65,6 @@ public class Color {
     }
 
     public Color setRed(double red) {
-//        if(!inRange(red)){
-//            throw new IllegalArgumentException("Color not in range: " + this);
-//        }
         this.red = red;
         return this;
     }
@@ -53,9 +74,6 @@ public class Color {
     }
 
     public Color setGreen(double green) {
-//        if(!inRange(green)){
-//            throw new IllegalArgumentException("Color not in range: " + this);
-//        }
         this.green = green;
         return this;
     }
@@ -65,9 +83,6 @@ public class Color {
     }
 
     public Color setBlue(double blue) {
-//        if(!inRange(blue)){
-//            throw new IllegalArgumentException("Color not in range: " + this);
-//        }
         this.blue = blue;
         return this;
     }

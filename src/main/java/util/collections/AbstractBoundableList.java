@@ -1,23 +1,16 @@
 package util.collections;
 
-import objects.Hittable;
+import objects.Boundable;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
-public abstract class AbstractHittableList implements HittableList {
-    protected List<Hittable> list;
+public abstract class AbstractBoundableList implements BoundableList {
+    protected List<Boundable> list;
 
-    public AbstractHittableList(List<Hittable> list) {
+    public AbstractBoundableList(List<Boundable> list) {
         this.list = list;
     }
 
-    @Override
-    public List<Hittable> getList() {
-        return list;
-    }
 
     @Override
     public int size() {
@@ -35,7 +28,7 @@ public abstract class AbstractHittableList implements HittableList {
     }
 
     @Override
-    public Iterator<Hittable> iterator() {
+    public Iterator<Boundable> iterator() {
         return list.iterator();
     }
 
@@ -50,8 +43,8 @@ public abstract class AbstractHittableList implements HittableList {
     }
 
     @Override
-    public boolean add(Hittable hittable) {
-        return list.add(hittable);
+    public boolean add(Boundable boundable) {
+        return list.add(boundable);
     }
 
     @Override
@@ -61,16 +54,16 @@ public abstract class AbstractHittableList implements HittableList {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return list.contains(c);
+        return new HashSet<>(list).containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends Hittable> c) {
+    public boolean addAll(Collection<? extends Boundable> c) {
         return list.addAll(c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Hittable> c) {
+    public boolean addAll(int index, Collection<? extends Boundable> c) {
         return list.addAll(index, c);
     }
 
@@ -90,22 +83,22 @@ public abstract class AbstractHittableList implements HittableList {
     }
 
     @Override
-    public Hittable get(int index) {
+    public Boundable get(int index) {
         return list.get(index);
     }
 
     @Override
-    public Hittable set(int index, Hittable element) {
+    public Boundable set(int index, Boundable element) {
         return list.set(index, element);
     }
 
     @Override
-    public void add(int index, Hittable element) {
+    public void add(int index, Boundable element) {
         list.add(index, element);
     }
 
     @Override
-    public Hittable remove(int index) {
+    public Boundable remove(int index) {
         return list.remove(index);
     }
 
@@ -120,17 +113,18 @@ public abstract class AbstractHittableList implements HittableList {
     }
 
     @Override
-    public ListIterator<Hittable> listIterator() {
+    public ListIterator<Boundable> listIterator() {
         return list.listIterator();
     }
 
     @Override
-    public ListIterator<Hittable> listIterator(int index) {
+    public ListIterator<Boundable> listIterator(int index) {
         return list.listIterator(index);
     }
 
     @Override
-    public List<Hittable> subList(int fromIndex, int toIndex) {
+    public List<Boundable> subList(int fromIndex, int toIndex) {
         return list.subList(fromIndex, toIndex);
     }
+
 }

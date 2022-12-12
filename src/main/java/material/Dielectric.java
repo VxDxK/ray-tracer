@@ -1,23 +1,28 @@
-package util.material;
+package material;
 
 import math.Ray;
 import math.Vector;
 import math.Vectors;
-import util.Color;
-import util.HitRecord;
+import math.Color;
+import math.HitRecord;
 
 public class Dielectric implements Material{
     private final double refractionIndex;
-
+    private final Color albedo;
     public Dielectric(double refractionIndex) {
+        this(refractionIndex, new Color(1, 1, 1));
+    }
+
+    @SuppressWarnings("I dont know is it right to add albedo")
+    public Dielectric(double refractionIndex, Color albedo) {
         this.refractionIndex = refractionIndex;
+        this.albedo = albedo;
     }
 
     @Override
     public boolean scatter(Ray rayIn, HitRecord record, Color attenuation, Ray scattered) {
-        attenuation.set(new Color(1, 1, 1));
+        attenuation.set(albedo);
         double refractionRatio = record.isFrontFace() ? (1.0/refractionIndex) : refractionIndex;
-
         Vector unitDirection = rayIn.getDirection().unit();
 
         double cosTheta = Math.min(1d, Vectors.dot(unitDirection.negate(), record.getNormal()));
@@ -30,8 +35,7 @@ public class Dielectric implements Material{
         }else{
             direction = Vectors.refract(unitDirection, record.getNormal(), refractionRatio);
         }
-        scattered.setOrigin(record.getPoint());
-        scattered.setDirection(direction);
+        scattered.setOrigin(record.getPoint()).setDirection(direction).setTimeMoment(rayIn.getTimeMoment());
         return true;
     }
 

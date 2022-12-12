@@ -7,8 +7,6 @@ public class Point {
     private double y = 0d;
     private double z = 0d;
 
-    public static final Point ORIGIN_POINT = new Point();
-
     public Point() {
     }
 
