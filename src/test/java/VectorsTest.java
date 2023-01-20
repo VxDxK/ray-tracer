@@ -34,4 +34,9 @@ class VectorsTest {
         Vector normal = new Vector(0, 1, 0);
         assertEquals(Vectors.reflect(vector, normal), new Vector(3, 3, 0));
     }
+
+    @Test
+    void refract() {
+
+    }
 }

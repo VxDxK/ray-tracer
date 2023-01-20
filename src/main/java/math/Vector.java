@@ -19,10 +19,14 @@ public class Vector {
         this.z = z;
     }
 
+    public Vector(Point point){
+        this(new Point(), point);
+    }
+
     public Vector(Point point1, Point point2){
-        this.x = -point1.getX() + point2.getX();
-        this.y = -point1.getY() + point2.getY();
-        this.z = -point1.getZ() + point2.getZ();
+        this.x = point2.getX() - point1.getX();
+        this.y = point2.getY() - point1.getY();
+        this.z = point2.getZ() - point1.getZ();
     }
 
     public Vector(Vector vector){

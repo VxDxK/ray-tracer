@@ -55,7 +55,14 @@ public class Vectors {
         }
     }
 
+    public static double[] toArray(Vector vector){
+        return new double[]{vector.getX(), vector.getY(), vector.getZ()};
+    }
+
     public static Vector randomUnitVector(){
         return randomInUnitSphere().unit();
+    }
+
+    private Vectors() {
     }
 }
