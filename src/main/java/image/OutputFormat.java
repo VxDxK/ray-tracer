@@ -6,6 +6,7 @@ public enum OutputFormat {
     BMP("bmp");
 
     public final String type;
+
     OutputFormat(String type) {
         this.type = type;
     }

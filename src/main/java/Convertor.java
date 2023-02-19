@@ -12,7 +12,7 @@ public class Convertor {
         final String destFilename = "image.png";
 
         // try to get hold of the file.
-        try(BufferedReader reader = new BufferedReader(new FileReader(sourceFilename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(sourceFilename))) {
             // validate file header
             final String FileHeader = "P3";
             String line = reader.readLine();

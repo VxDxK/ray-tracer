@@ -4,6 +4,7 @@ public class Ray {
     private Point origin = new Point();
     private Vector direction = new Vector();
     private double timeMoment = 0;
+
     public Ray() {
     }
 
@@ -17,7 +18,7 @@ public class Ray {
         this.timeMoment = timeMoment;
     }
 
-    public Point at(double t){
+    public Point at(double t) {
         return origin.move(direction.multiply(t));
     }
 

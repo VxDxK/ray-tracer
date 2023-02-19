@@ -5,7 +5,7 @@ import util.Pair;
 
 import java.util.*;
 
-public class ArrayImage implements Image{
+public class ArrayImage implements Image {
     private final int xLen;
     private final int yLen;
     private final Color[][] colors;
@@ -29,7 +29,7 @@ public class ArrayImage implements Image{
 
     @Override
     public Color getColor(int x, int y) {
-        if(x >= xLen || y >= yLen){
+        if (x >= xLen || y >= yLen) {
             throw new IllegalArgumentException("Coordinate out of image size");
         }
         return colors[x][y];

@@ -16,7 +16,6 @@ public class AABB {
     }
 
 
-
     public AABB(Point min, Point max) {
         xInterval = new Interval(Math.min(min.getX(), max.getX()), Math.max(min.getX(), max.getX()));
         yInterval = new Interval(Math.min(min.getY(), max.getY()), Math.max(min.getY(), max.getY()));
@@ -29,14 +28,14 @@ public class AABB {
         this.zInterval = zInterval;
     }
 
-    public boolean hit(Ray r, Interval tInterval){
+    public boolean hit(Ray r, Interval tInterval) {
         Interval[] axis = {xInterval, yInterval, zInterval};
         double[] vecAxis = Vectors.toArray(r.getDirection());
         double[] pointCo = Points.toArray(r.getOrigin());
         Interval tmpInterval = new Interval(tInterval);
-        for (int i = 0; i < 3; i++){
-            double t0 = Math.min((axis[i].getMin() - pointCo[i])/ vecAxis[i], (axis[i].getMax() - pointCo[i])/vecAxis[i]);
-            double t1 = Math.max((axis[i].getMin() - pointCo[i])/vecAxis[i], (axis[i].getMax() - pointCo[i])/vecAxis[i]);
+        for (int i = 0; i < 3; i++) {
+            double t0 = Math.min((axis[i].getMin() - pointCo[i]) / vecAxis[i], (axis[i].getMax() - pointCo[i]) / vecAxis[i]);
+            double t1 = Math.max((axis[i].getMin() - pointCo[i]) / vecAxis[i], (axis[i].getMax() - pointCo[i]) / vecAxis[i]);
 
             tmpInterval.setMin(Math.max(t0, tmpInterval.getMin()));
             tmpInterval.setMax(Math.min(t1, tmpInterval.getMax()));
@@ -59,14 +58,14 @@ public class AABB {
         return zInterval;
     }
 
-    public static AABB surroundingBox(AABB box0, AABB box1){
+    public static AABB surroundingBox(AABB box0, AABB box1) {
         Interval x = new Interval(box0.xInterval, box1.xInterval);
         Interval y = new Interval(box0.yInterval, box1.yInterval);
         Interval z = new Interval(box0.zInterval, box1.zInterval);
         return new AABB(x, y, z);
     }
 
-    public AABB pad(){
+    public AABB pad() {
         double delta = 0.1;
         Interval newX = (xInterval.size() >= delta) ? xInterval : xInterval.expand(delta);
         Interval newY = (yInterval.size() >= delta) ? yInterval : yInterval.expand(delta);

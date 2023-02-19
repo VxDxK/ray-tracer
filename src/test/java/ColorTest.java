@@ -1,7 +1,7 @@
 import math.Color;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ColorTest {
 
@@ -24,7 +24,7 @@ class ColorTest {
     }
 
     @Test
-    void toRGBfromRGB(){
+    void toRGBfromRGB() {
         Color color = new Color(1, 0, 1);
         assertEquals(color, Color.getByRGB(color.toRGB()));
     }

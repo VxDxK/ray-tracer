@@ -3,7 +3,7 @@ package objects;
 import material.Material;
 import math.*;
 
-public class Quadrilateral extends Plane implements Boundable{
+public class Quadrilateral extends Plane implements Boundable {
     private final AABB box;
     private final Vector w;
 
@@ -31,7 +31,7 @@ public class Quadrilateral extends Plane implements Boundable{
         double beta = Vectors.dot(w, Vectors.cross(u, hitVector));
 
         Interval testInterval = new Interval(0, 1);
-        if(!testInterval.contains(alpha) || !testInterval.contains(beta))
+        if (!testInterval.contains(alpha) || !testInterval.contains(beta))
             return false;
 
         rec.set(record).setU(alpha).setV(beta);

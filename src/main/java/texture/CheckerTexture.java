@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 import static java.lang.Math.sin;
 
-public class CheckerTexture implements Texture{
+public class CheckerTexture implements Texture {
     private final Texture odd;
     private final Texture even;
     private final double scale;

@@ -8,7 +8,7 @@ import texture.SolidColorTexture;
 import texture.Texture;
 import math.HitRecord;
 
-public class Metal implements Material{
+public class Metal implements Material {
     private final Texture albedo;
     //Для создания нечеткого отражения
     private final double fuzz;
@@ -24,12 +24,12 @@ public class Metal implements Material{
         this.fuzz = fuzz;
     }
 
-    public Metal(Texture texture){
+    public Metal(Texture texture) {
         this.albedo = texture;
         this.fuzz = 0d;
     }
 
-    public Metal(Texture texture, double fuzz){
+    public Metal(Texture texture, double fuzz) {
         this.albedo = texture;
         this.fuzz = fuzz;
     }
@@ -37,13 +37,10 @@ public class Metal implements Material{
     @Override
     public boolean scatter(Ray rayIn, HitRecord record, Color attenuation, Ray scattered) {
         Vector reflected = Vectors.reflect(rayIn.getDirection().unit(), record.getNormal());
-        scattered.setOrigin(record.getPoint())
-                .setDirection(reflected.add(Vectors.randomInUnitSphere().multiply(fuzz)))
-                .setTimeMoment(rayIn.getTimeMoment());
+        scattered.setOrigin(record.getPoint()).setDirection(reflected.add(Vectors.randomInUnitSphere().multiply(fuzz))).setTimeMoment(rayIn.getTimeMoment());
 
         boolean scatter = Vectors.dot(scattered.getDirection(), record.getNormal()) > 0;
-        if (scatter)
-            attenuation.set(albedo.value(record.getU(), record.getV(), record.getPoint()));
+        if (scatter) attenuation.set(albedo.value(record.getU(), record.getV(), record.getPoint()));
         return scatter;
     }
 }

@@ -4,11 +4,12 @@ import math.Vector;
 import objects.AABB;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class AABBTest {
     @Test
-    void testIntervals(){
+    void testIntervals() {
         AABB aabb = new AABB(new Point(1, 2, 3), new Point(3, 4, 5));
         Interval x = aabb.getX();
         Interval y = aabb.getY();
@@ -20,8 +21,8 @@ class AABBTest {
     }
 
     @Test
-    void padTest(){
-        AABB aabb = new AABB(new Point(0, 0, 0), new Point(0, 0, 0).move(new  Vector(0, 0, 2)).move(new Vector(2, 0, 0)));
+    void padTest() {
+        AABB aabb = new AABB(new Point(0, 0, 0), new Point(0, 0, 0).move(new Vector(0, 0, 2)).move(new Vector(2, 0, 0)));
         AABB padded = aabb.pad();
         assertNotEquals(padded.getY().size(), 0d);
     }

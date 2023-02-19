@@ -19,7 +19,7 @@ public class ImageWriter {
     }
 
     public void writeToBuffer(BufferedImage imageBuf, Image image) {
-        for (Pixel px: image) {
+        for (Pixel px : image) {
             Color now = px.getColor();
             Color corrected = new Color(gammaCorrection.apply(now.getRed()), gammaCorrection.apply(now.getGreen()), gammaCorrection.apply(now.getBlue()));
             imageBuf.setRGB(px.getX(), px.getY(), corrected.toRGB());
@@ -41,7 +41,7 @@ public class ImageWriter {
         writeToFile(file, bufferedImage, OutputFormat.PNG);
     }
 
-    public void writeToFile(Path file, Image image) throws IOException{
+    public void writeToFile(Path file, Image image) throws IOException {
         writeToFile(file, write(image));
     }
 

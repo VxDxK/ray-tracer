@@ -16,13 +16,13 @@ public class Point {
         this.z = z;
     }
 
-    public Point(Point point){
+    public Point(Point point) {
         this.x = point.getX();
         this.y = point.getY();
         this.z = point.getZ();
     }
 
-    public Point move(Vector vector){
+    public Point move(Vector vector) {
         return new Point(x + vector.getX(), y + vector.getY(), z + vector.getZ());
     }
 

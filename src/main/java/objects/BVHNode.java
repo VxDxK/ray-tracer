@@ -20,11 +20,11 @@ public class BVHNode implements Boundable {
     }
 
     public BVHNode(BoundableList list, int begin, int end) {
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             left = new Boundable() {
                 @Override
                 public AABB boundingBox() {
-                    return new AABB(){
+                    return new AABB() {
                         @Override
                         public boolean hit(Ray r, Interval tInterval) {
                             return false;
@@ -45,13 +45,13 @@ public class BVHNode implements Boundable {
         List<Comparator<Boundable>> comparators = List.of(new XComparator(), new YComparator(), new ZComparator());
         Comparator<Boundable> comparator = comparators.get(random.nextInt(0, 3));
         int span = end - begin;
-        if(span == 1){
+        if (span == 1) {
             left = list.get(begin);
             right = left;
-        }else if(span == 2){
+        } else if (span == 2) {
             left = list.get(begin);
             right = list.get(begin + 1);
-        }else{
+        } else {
             list.subList(begin, end).sort(comparator);
             int mid = begin + span / 2;
             left = new BVHNode(list, begin, mid);
@@ -68,7 +68,7 @@ public class BVHNode implements Boundable {
 
     @Override
     public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
-        if(!box.hit(r, tInterval))
+        if (!box.hit(r, tInterval))
             return false;
         boolean hitLeft = left.hit(r, tInterval, rec);
         boolean hitRight = right.hit(r, new Interval(tInterval.getMin(), hitLeft ? rec.getT() : tInterval.getMax()), rec);

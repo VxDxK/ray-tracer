@@ -11,7 +11,8 @@ public class MovingSphere implements Boundable {
     private final double radius;
     private final Material material;
     private final AABB box;
-    public MovingSphere(Point centerStart, Point centerFinish, double radius, double timeStart, double timeFinish,  Material material) {
+
+    public MovingSphere(Point centerStart, Point centerFinish, double radius, double timeStart, double timeFinish, Material material) {
         this.centerStart = centerStart;
         this.centerFinish = centerFinish;
         this.timeStart = timeStart;
@@ -31,9 +32,9 @@ public class MovingSphere implements Boundable {
         Vector oc = new Vector(center(r.getTimeMoment()), r.getOrigin());
         double A = r.getDirection().lengthSquared();
         double halfB = Vectors.dot(oc, r.getDirection());
-        double C = oc.lengthSquared() - radius*radius;
-        double discriminant = halfB*halfB - A*C;
-        if(discriminant < 0d){
+        double C = oc.lengthSquared() - radius * radius;
+        double discriminant = halfB * halfB - A * C;
+        if (discriminant < 0d) {
             return false;
         }
         double sqrtd = Math.sqrt(discriminant);
@@ -58,11 +59,11 @@ public class MovingSphere implements Boundable {
         return box;
     }
 
-    private Point center(double time){
-        if(Math.abs(timeFinish - timeStart) <= 1e-10){
+    private Point center(double time) {
+        if (Math.abs(timeFinish - timeStart) <= 1e-10) {
             return centerStart;
         }
-        return centerStart.move(new Vector(centerStart, centerFinish).multiply((time - timeStart)/(timeFinish - timeStart)));
+        return centerStart.move(new Vector(centerStart, centerFinish).multiply((time - timeStart) / (timeFinish - timeStart)));
     }
 
 

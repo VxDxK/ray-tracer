@@ -3,7 +3,7 @@ package texture;
 import math.Color;
 import math.Point;
 
-public class SinCheckerTexture implements Texture{
+public class SinCheckerTexture implements Texture {
     private final Texture odd;
     private final Texture even;
 
@@ -12,7 +12,7 @@ public class SinCheckerTexture implements Texture{
         this.even = even;
     }
 
-    public SinCheckerTexture(Color odd, Color even){
+    public SinCheckerTexture(Color odd, Color even) {
         this.odd = new SolidColorTexture(odd);
         this.even = new SolidColorTexture(even);
     }

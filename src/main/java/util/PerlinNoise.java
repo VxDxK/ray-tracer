@@ -8,7 +8,6 @@ import math.Vectors;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static java.lang.Math.floor;
 
@@ -31,11 +30,11 @@ public class PerlinNoise {
         Collections.shuffle(permZ);
     }
 
-    public double turbulence(Point p){
+    public double turbulence(Point p) {
         return turbulence(p, 4);
     }
 
-    public double turbulence(Point p, int depth){
+    public double turbulence(Point p, int depth) {
         double accum = 0.0;
         Point tmp = new Point(p);
         double weight = 1.0;
@@ -48,20 +47,20 @@ public class PerlinNoise {
         return Math.abs(accum);
     }
 
-    public double noise(Point p){
+    public double noise(Point p) {
         double u = p.getX() - floor(p.getX());
         double v = p.getY() - floor(p.getY());
         double w = p.getZ() - floor(p.getZ());
 
-        int i = (int)floor(p.getX());
-        int j = (int)floor(p.getY());
-        int k = (int)floor(p.getZ());
+        int i = (int) floor(p.getX());
+        int j = (int) floor(p.getY());
+        int k = (int) floor(p.getZ());
         Vector[][][] c = new Vector[2][2][2];
-        for (int di=0; di < 2; di++)
-            for (int dj=0; dj < 2; dj++)
-                for (int dk=0; dk < 2; dk++)
+        for (int di = 0; di < 2; di++)
+            for (int dj = 0; dj < 2; dj++)
+                for (int dk = 0; dk < 2; dk++)
                     c[di][dj][dk] = randomVectors[
-                                    permX.get((i + di) & 255) ^
+                            permX.get((i + di) & 255) ^
                                     permY.get((j + dj) & 255) ^
                                     permZ.get((k + dk) & 255)
                             ];
@@ -69,7 +68,7 @@ public class PerlinNoise {
         return interpolation(c, u, v, w);
     }
 
-    private double interpolation(Vector[][][] c, double u, double v, double w){
+    private double interpolation(Vector[][][] c, double u, double v, double w) {
         double accum = 0d;
         double uu = u * u * (3 - 2 * u);
         double vv = v * v * (3 - 2 * v);

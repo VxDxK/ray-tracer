@@ -4,7 +4,7 @@ import material.Material;
 import math.*;
 
 @Deprecated
-public class Quad implements Hittable, Boundable{
+public class Quad implements Hittable, Boundable {
     private final Point Q;
     private final Vector u;
     private final Vector v;
@@ -37,11 +37,11 @@ public class Quad implements Hittable, Boundable{
     @Override
     public boolean hit(Ray r, Interval tInterval, HitRecord rec) {
         double denom = Vectors.dot(normal, r.getDirection());
-        if(Math.abs(denom) < 1e-8)
+        if (Math.abs(denom) < 1e-8)
             return false;
 
         double t = (D - Vectors.dot(normal, new Vector(r.getOrigin()))) / denom;
-        if(!tInterval.contains(t)){
+        if (!tInterval.contains(t)) {
             return false;
         }
 

@@ -1,16 +1,15 @@
 package util;
 
-import math.*;
-import util.collections.BoundableList;
-import util.collections.HittableList;
 import material.Dielectric;
 import material.Lambertian;
 import material.Material;
 import material.Metal;
+import math.*;
 import objects.Hittable;
 import objects.Sphere;
+import util.collections.BoundableList;
 
-import static java.lang.Math.*;
+import static java.lang.Math.random;
 
 public class Util {
     public static double clamp(double x, double min, double max) {

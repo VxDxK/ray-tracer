@@ -3,7 +3,7 @@ package texture;
 import math.Color;
 import math.Point;
 
-public class SolidColorTexture implements Texture{
+public class SolidColorTexture implements Texture {
     private final Color color;
 
     public SolidColorTexture(Color color) {

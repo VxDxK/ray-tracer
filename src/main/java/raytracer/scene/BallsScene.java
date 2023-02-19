@@ -22,19 +22,18 @@ import util.collections.impl.HittableArrayList;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class BallsScene extends Scene{
+public class BallsScene extends Scene {
     @Override
     public void init() {
         Path earth = Paths.get("src", "main", "resources", "earthrealistic.jpg");
         Texture earthTexture = new ImageTexture(earth);
 
 
-
-        boundableObjects.add(new MovingSphere(new Point(-1, 1, 0), new Point(1, 1, 0), 1, 2,5, new Lambertian(Colors.PURPLE)));
+        boundableObjects.add(new MovingSphere(new Point(-1, 1, 0), new Point(1, 1, 0), 1, 2, 5, new Lambertian(Colors.PURPLE)));
         boundableObjects.add(new Sphere(new Point(0, -1000, 0), 1000, new Lambertian(new Color(0.8, 0.7, 0.8))));
         boundableObjects.add(new Sphere(new Point(0, 3, 0), 1, new Lambertian(earthTexture)));
 
-        Camera camera = new ClearCamera(new Point(8, 4, 8), new Point(0, 2, 0), new Vector(0, 1, 0), 20, 16d/9d);
+        Camera camera = new ClearCamera(new Point(8, 4, 8), new Point(0, 2, 0), new Vector(0, 1, 0), 20, 16d / 9d);
         this.camera = new MotionBlurCamera(camera, 1, 2);
     }
 }

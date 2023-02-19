@@ -8,6 +8,7 @@ import java.util.function.BiFunction;
 
 public class XComparator implements Comparator<Boundable> {
     BoxComparator boxComparator = new BoxComparator();
+
     @Override
     public int compare(Boundable a, Boundable b) {
         return boxComparator.apply(a, b, 0);

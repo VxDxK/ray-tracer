@@ -11,29 +11,29 @@ public class Interval {
         this.max = max;
     }
 
-    public Interval(Interval interval){
+    public Interval(Interval interval) {
         this.min = interval.getMin();
         this.max = interval.getMax();
     }
 
-    public Interval(Interval a, Interval b){
+    public Interval(Interval a, Interval b) {
         this.min = Math.min(a.getMin(), b.getMin());
         this.max = Math.max(a.getMax(), b.getMax());
     }
 
-    public boolean contains(double x){
+    public boolean contains(double x) {
         return min <= x && x <= max;
     }
 
-    public Interval expand(double delta){
-        return new Interval(min - delta/2, max + delta/2);
+    public Interval expand(double delta) {
+        return new Interval(min - delta / 2, max + delta / 2);
     }
 
-    public Interval scale(double t){
+    public Interval scale(double t) {
         return new Interval(min * t, max * t);
     }
 
-    public double size(){
+    public double size() {
         return max - min;
     }
 

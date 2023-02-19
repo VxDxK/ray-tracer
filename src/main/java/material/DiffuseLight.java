@@ -4,7 +4,7 @@ import math.*;
 import texture.SolidColorTexture;
 import texture.Texture;
 
-public class DiffuseLight implements Material{
+public class DiffuseLight implements Material {
     private final Texture texture;
 
     public DiffuseLight(Color color) {

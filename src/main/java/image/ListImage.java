@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ListImage implements Image{
+public class ListImage implements Image {
     private final int xLen;
     private final int yLen;
     private final List<Pixel> list = new LinkedList<>();
@@ -30,11 +30,11 @@ public class ListImage implements Image{
 
     @Override
     public Color getColor(int x, int y) {
-        if(x >= xLen || y >= yLen){
+        if (x >= xLen || y >= yLen) {
             throw new IllegalArgumentException("Coordinate out of image size");
         }
-        for (Pixel px: list) {
-            if(px.getX() == x && px.getY() == y){
+        for (Pixel px : list) {
+            if (px.getX() == x && px.getY() == y) {
                 return px.getColor();
             }
         }

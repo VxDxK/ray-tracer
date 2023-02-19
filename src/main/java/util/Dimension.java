@@ -1,7 +1,5 @@
 package util;
 
-import raytracer.RayTracerConfig;
-
 import java.util.Objects;
 
 public class Dimension {
@@ -12,7 +10,7 @@ public class Dimension {
     public Dimension(int width, int height) {
         this.height = height;
         this.width = width;
-        this.aspectRatio = (double) width / (double)height;
+        this.aspectRatio = (double) width / (double) height;
     }
 
     public Dimension(int width, double aspectRatio) {

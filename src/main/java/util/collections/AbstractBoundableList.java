@@ -11,7 +11,6 @@ public abstract class AbstractBoundableList implements BoundableList {
         this.list = list;
     }
 
-
     @Override
     public int size() {
         return list.size();

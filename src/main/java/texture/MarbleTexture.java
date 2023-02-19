@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 public class MarbleTexture extends PerlinTexture {
     private final Function<Point, Double> coordinate;
+
     public MarbleTexture() {
         super();
         coordinate = Point::getZ;
@@ -24,6 +25,6 @@ public class MarbleTexture extends PerlinTexture {
 
     @Override
     public Color value(double u, double v, Point p) {
-        return color.scale(0.5 * (1 + Math.sin(scale * coordinate.apply(p) +  10 * noise.turbulence(p))));
+        return color.scale(0.5 * (1 + Math.sin(scale * coordinate.apply(p) + 10 * noise.turbulence(p))));
     }
 }

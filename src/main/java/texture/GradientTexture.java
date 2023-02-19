@@ -4,7 +4,7 @@ import math.Color;
 import math.Colors;
 import math.Point;
 
-public class GradientTexture implements Texture{
+public class GradientTexture implements Texture {
     private final Color begin;
     private final Color end;
 

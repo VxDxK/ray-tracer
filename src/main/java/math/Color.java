@@ -19,19 +19,19 @@ public class Color {
         this.blue = blue;
     }
 
-    public Color(Color color){
+    public Color(Color color) {
         this.red = color.getRed();
         this.green = color.getGreen();
         this.blue = color.getBlue();
     }
 
-    public void set(Color color){
+    public void set(Color color) {
         this.red = color.getRed();
         this.green = color.getGreen();
         this.blue = color.getBlue();
     }
 
-    public static Color getByRGB(int rgb){
+    public static Color getByRGB(int rgb) {
         int r = (rgb >> 16) & 0xff;
         int g = (rgb >> 8) & 0xff;
         int b = (rgb) & 0xff;
@@ -39,10 +39,10 @@ public class Color {
     }
 
 
-    public int toRGB(){
-        int r = (int)(256 * clamp(red, 0d, 0.999));
-        int g = (int)(256 * clamp(green, 0d, 0.999));
-        int b = (int)(256 * clamp(blue, 0d, 0.999));
+    public int toRGB() {
+        int r = (int) (256 * clamp(red, 0d, 0.999));
+        int g = (int) (256 * clamp(green, 0d, 0.999));
+        int b = (int) (256 * clamp(blue, 0d, 0.999));
 
         int ans = 0;
         ans += (r << 16);
@@ -52,11 +52,11 @@ public class Color {
         return ans & 0xffffff;
     }
 
-    public static Color getByRGB(int r, int g, int b){
-        return new Color((float)r/255, (float)g/255, (float)b/255);
+    public static Color getByRGB(int r, int g, int b) {
+        return new Color((float) r / 255, (float) g / 255, (float) b / 255);
     }
 
-    public Color scale(double t){
+    public Color scale(double t) {
         return new Color(red * t, green * t, blue * t);
     }
 
@@ -96,9 +96,10 @@ public class Color {
 
     @Override
     public int hashCode() {
-        return Objects.hash(red, green, blue);}
+        return Objects.hash(red, green, blue);
+    }
 
-    private boolean inRange(double d){
+    private boolean inRange(double d) {
         return d <= 1d && d >= 0;
     }
 

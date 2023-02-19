@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ColorImage implements Image{
+public class ColorImage implements Image {
     private final int x;
     private final int y;
     private final Color color;
@@ -35,7 +35,7 @@ public class ColorImage implements Image{
     @Override
     public Iterator<Pixel> iterator() {
         List<Pixel> pixels = new ArrayList<>();
-        for (int i = 0; i < x; i++){
+        for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 pixels.add(new Pixel(i, j, color));
             }

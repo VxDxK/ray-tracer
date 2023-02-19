@@ -7,8 +7,6 @@ import objects.Quadrilateral;
 import org.junit.jupiter.api.Test;
 import util.collections.impl.BoundableArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class QuadrilateralTest {
 
     @Test

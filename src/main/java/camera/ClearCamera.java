@@ -6,7 +6,7 @@ import math.Vector;
 import math.Vectors;
 
 
-public class ClearCamera implements Camera{
+public class ClearCamera implements Camera {
     private final Point origin;
     private final Point lowerLeftCorner;
     private final Vector horizontal;
@@ -14,7 +14,7 @@ public class ClearCamera implements Camera{
 
     public ClearCamera(Point lookFrom, Point lookAt, Vector worldNormal, double verticalFov, double aspectRatio) {
         double theta = Math.toRadians(verticalFov);
-        double h = Math.tan(theta/2);
+        double h = Math.tan(theta / 2);
         double viewportHeight = 2.0 * h;
         double viewportWidth = aspectRatio * viewportHeight;
 
@@ -51,5 +51,5 @@ public class ClearCamera implements Camera{
     public Vector getVertical() {
         return vertical;
     }
-    
+
 }

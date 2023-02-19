@@ -12,9 +12,10 @@ public class BlurCamera implements Camera {
     private final Vector vertical;
     private final double lensRadius;
     private final Vector w, u, v;
-    public BlurCamera(Point lookFrom, Point lookAt, Vector worldNormal, double verticalFov, double aspectRatio, double aperture, double focusDist){
+
+    public BlurCamera(Point lookFrom, Point lookAt, Vector worldNormal, double verticalFov, double aspectRatio, double aperture, double focusDist) {
         double theta = Math.toRadians(verticalFov);
-        double h = Math.tan(theta/2);
+        double h = Math.tan(theta / 2);
         double viewportHeight = 2.0 * h;
         double viewportWidth = aspectRatio * viewportHeight;
 
@@ -29,11 +30,11 @@ public class BlurCamera implements Camera {
         this.vertical = v.multiply(viewportHeight).multiply(focusDist);
         this.lowerLeftCorner = origin.move(vertical.negate().divide(2)).move(horizontal.negate().divide(2)).move(w.negate().multiply(focusDist));
 
-        lensRadius = aperture/2;
+        lensRadius = aperture / 2;
     }
 
     @Override
-    public Ray getRay(double s, double t){
+    public Ray getRay(double s, double t) {
         Vector rd = Vectors.randomInUnitSphere().multiply(lensRadius);
         Vector offset = u.multiply(rd.getX()).add(v.multiply(rd.getY()));
 

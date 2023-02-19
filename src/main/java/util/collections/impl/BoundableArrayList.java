@@ -1,9 +1,9 @@
 package util.collections.impl;
 
+import math.HitRecord;
 import math.Interval;
 import math.Ray;
 import objects.AABB;
-import math.HitRecord;
 import objects.Boundable;
 import objects.Hittable;
 import util.collections.AbstractBoundableList;
@@ -18,17 +18,17 @@ public class BoundableArrayList extends AbstractBoundableList {
 
     @Override
     public AABB boundingBox() {
-        if(this.list.isEmpty()){
+        if (this.list.isEmpty()) {
             throw new RuntimeException("Empty BoundingArrayList");
         }
         AABB tmpBox = new AABB();
         boolean firstBox = true;
 
-        for(Boundable i : this){
-            if(firstBox){
+        for (Boundable i : this) {
+            if (firstBox) {
                 tmpBox = i.boundingBox();
                 firstBox = false;
-            }else{
+            } else {
                 tmpBox = (AABB.surroundingBox(i.boundingBox(), tmpBox));
             }
         }
@@ -41,8 +41,8 @@ public class BoundableArrayList extends AbstractBoundableList {
         boolean hitAnything = false;
         double closestSoFar = tInterval.getMax();
 
-        for (Hittable i: this) {
-            if(i.hit(r, new Interval(tInterval.getMin(), closestSoFar), tempHit)){
+        for (Hittable i : this) {
+            if (i.hit(r, new Interval(tInterval.getMin(), closestSoFar), tempHit)) {
                 hitAnything = true;
                 closestSoFar = tempHit.getT();
                 rec.set(tempHit);

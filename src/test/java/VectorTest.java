@@ -1,13 +1,13 @@
 
-import org.junit.jupiter.api.Test;
-import math.Vector;
 import math.Point;
+import math.Vector;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorTest {
     @Test
-    void constructorTest(){
+    void constructorTest() {
         Point point1 = new Point(0, 0, 0);
         Point point2 = new Point(5, 1, 7);
 

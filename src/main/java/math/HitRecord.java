@@ -3,7 +3,7 @@ package math;
 import material.Material;
 import util.Pair;
 
-public class HitRecord{
+public class HitRecord {
     private Point point = new Point();
     private Vector normal = new Vector();
     private double t = 0d;
@@ -15,7 +15,7 @@ public class HitRecord{
     public HitRecord() {
     }
 
-    public HitRecord(HitRecord record){
+    public HitRecord(HitRecord record) {
         this.point = new Point(record.getPoint());
         this.normal = new Vector(record.getNormal());
         this.t = record.getT();
@@ -25,7 +25,7 @@ public class HitRecord{
         this.material = record.getMaterial();
     }
 
-    public HitRecord set(HitRecord record){
+    public HitRecord set(HitRecord record) {
         point = record.point;
         normal = record.normal;
         t = record.t;
@@ -36,7 +36,7 @@ public class HitRecord{
         return this;
     }
 
-    public HitRecord setFaceNormal(Ray r, Vector outwardNormal){
+    public HitRecord setFaceNormal(Ray r, Vector outwardNormal) {
         frontFace = Vectors.dot(r.getDirection(), outwardNormal) < 0;
         normal = frontFace ? outwardNormal : outwardNormal.negate();
         return this;
@@ -96,6 +96,7 @@ public class HitRecord{
         this.v = v;
         return this;
     }
+
     public HitRecord setUV(Pair<Double, Double> uv) {
         this.u = uv.getFirst();
         this.v = uv.getSecond();

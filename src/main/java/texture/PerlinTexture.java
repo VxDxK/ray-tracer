@@ -5,14 +5,12 @@ import math.Point;
 import math.Points;
 import util.PerlinNoise;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-public class PerlinTexture implements Texture{
+public class PerlinTexture implements Texture {
     protected final PerlinNoise noise = new PerlinNoise();
     protected final double scale;
     protected final int depth;
     protected final Color color;
+
     public PerlinTexture() {
         this(new Color(1, 1, 1), 4, 1);
     }
@@ -21,7 +19,7 @@ public class PerlinTexture implements Texture{
         this(new Color(1, 1, 1), scale, depth);
     }
 
-    public PerlinTexture(Color color, double scale, int depth){
+    public PerlinTexture(Color color, double scale, int depth) {
         this.color = color;
         this.scale = scale;
         this.depth = depth;

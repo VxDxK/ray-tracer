@@ -1,8 +1,8 @@
-import org.junit.jupiter.api.Test;
 import math.Vector;
 import math.Vectors;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class VectorsTest {
 
